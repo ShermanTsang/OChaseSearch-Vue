@@ -1,14 +1,16 @@
 import Vue from 'vue'
 import App from './App.vue'
-
 import VueRouter from 'vue-router'
 import router from './router'
+import store from './store'
 import Axios from './api'
+import DayJs from 'dayjs'
 import {upperFirst,camelCase,kebabCase} from 'lodash'
 
 Vue.use(VueRouter)
 
-Vue.prototype.$axios=Axios
+Vue.prototype.$axios= Axios
+Vue.prototype.$time = DayJs
 
 Vue.config.productionTip = false
 
@@ -38,6 +40,7 @@ nextComponents.keys().forEach(fileName => {
 })
 
 new Vue({
+  store,
   router,
   render: h => h(App),
 }).$mount('#app')

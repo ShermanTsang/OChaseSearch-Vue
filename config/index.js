@@ -3,7 +3,7 @@ const defaultConfig = require('./default')
 
 let customConfig = {}
 try {
-  customConfig = require('./custom').default
+  customConfig = require('./custom')
 } catch (e) {
   customConfig = {}
 }

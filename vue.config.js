@@ -23,6 +23,8 @@ module.exports = {
     }
   },
   devServer: {
+    host: config['server.host'],
+    port: config['server.port'],
     proxy: {
       '/api': {
         target: `${config['api.protocol']}://${config['api.domain']}`,

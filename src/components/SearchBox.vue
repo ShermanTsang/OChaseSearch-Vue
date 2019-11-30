@@ -52,7 +52,7 @@
           this.$message.error('关键字不能为空')
           return
         }
-        this.$router.push({ path: '/', query: { keyword } })
+        this.$router.push({ name: 'search', query: { keyword } })
         this.$emit('on-search')
       }
     }
