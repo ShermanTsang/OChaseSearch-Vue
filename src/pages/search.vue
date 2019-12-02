@@ -136,7 +136,7 @@
         }
       },
       async requestEngineList() {
-        const {data: engineList} = await this.$axios.get('/api/engines', {params: {}})
+        const {data: engineList} = await this.$axios.get(this.$apiUrl('/engines'), {params: {}})
         this.data.engineList = engineList
         this.setActiveEngine()
         this.loadSearchResult()

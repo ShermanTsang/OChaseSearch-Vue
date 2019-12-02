@@ -11,6 +11,12 @@ Vue.use(VueRouter)
 
 Vue.prototype.$axios= Axios
 Vue.prototype.$time = DayJs
+Vue.prototype.$apiUrl = (apiUrl) => {
+  if(process.env.NODE_ENV === 'production') {
+    return apiUrl
+  }
+  return 'api' + apiUrl
+}
 
 Vue.config.productionTip = false
 
