@@ -13,10 +13,12 @@
                 flex-grow: 1;
 
                 &__iframe {
+                    position: relative;
                     opacity: .6;
                     width: 100%;
                     height: 100%;
-                    transition: opacity .2s ease-in-out;
+                    transition: opacity .1s ease-in-out;
+                    border: 1px solid #eee;
 
                     iframe {
                         width: 100%;
@@ -26,6 +28,18 @@
 
                     &:hover {
                         opacity: 1;
+                    }
+
+                    &:before {
+                        position: absolute;
+                        right: 0;
+                        top: 0;
+                        bottom: 0;
+                        content: '';
+                        height: 100%;
+                        width: 18px;
+                        background-color: rgba(255, 255, 255, .8);
+                        box-shadow: -2px 0 6px rgba(177, 177, 177, .5);
                     }
 
                 }
@@ -61,62 +75,63 @@
 <template>
     <div class="page">
         <SearchHeader class="page__header">
-            <SearchBox @on-search="loadSearchResult"></SearchBox>
+            <SearchBox @on-search="loadSearchResult" />
         </SearchHeader>
         <div class="page__main">
-            <template v-if="status.activeEngineList">
-            <div v-for="item in status.activeEngineList" :key="item.slug" class="page__main__web">
-                <Loading v-if="item.isLoading" :fix="true">
-                    {{ item.name }}加载中...
-                </Loading>
-                <div class="page__main__web__iframe">
-                    <iframe :id="`iframe-${item.slug}`" :src="getSearchEngineUrl(item.url)" allowtransparency></iframe>
-                </div>
-                <div class="page__main__web__toolbar">
-                    <div class="page__main__web__toolbar__info">
-                        <span>{{ item.category }} /</span> {{ item.name }}
+            <template v-if="activeEngineList && activeEngineList.length > 0">
+                <div v-for="item in activeEngineList" :key="item.slug" class="page__main__web">
+                    <Loading v-if="item.isLoading" :fix="true">
+                        {{ item.name }}加载中...
+                    </Loading>
+                    <div class="page__main__web__iframe">
+                        <iframe :id="`iframe-${item.slug}`" :src="getSearchEngineUrl(item.url)"
+                                allowtransparency></iframe>
+                    </div>
+                    <div class="page__main__web__toolbar">
+                        <div class="page__main__web__toolbar__info">
+                            <span>{{ item.category }} /</span> {{ item.name }}
+                        </div>
                     </div>
                 </div>
-            </div>
             </template>
         </div>
     </div>
 </template>
 
 <script>
+  import {mapGetters} from 'vuex'
+
   export default {
     name: 'Search',
     data() {
       return {
-        data: {
-          engineList: []
-        },
         status: {
-          activeEngineList: [],
           isLoading: {}
         }
       }
     },
     computed: {
+      ...mapGetters(['engineList', 'activeEngineList'])
     },
     mounted() {
-      this.requestEngineList()
+      this.checkActiveEngine()
       this.loadSearchResult()
     },
     methods: {
       getSearchEngineUrl(url) {
         return url.replace(new RegExp('%s'), this.$route.query.keyword)
       },
-      setActiveEngine() {
-        if (!window.localStorage.getItem('search/activeEngine')) {
-          this.status.activeEngineList = this.data.engineList.filter((item) => {
+      checkActiveEngine() {
+        if (!this.activeEngineList || this.activeEngineList.length === 0) {
+          const activeEngineList = this.engineList.filter((item) => {
             return ['bing', 'baidu'].includes(item.slug)
           })
+          this.$store.commit('SET_ACTIVE_ENGINE_LIST', activeEngineList)
         }
       },
       loadSearchResult() {
         setTimeout(() => {
-          this.status.activeEngineList.forEach((item) => {
+          this.activeEngineList.forEach((item) => {
             this.$set(item, 'isLoading', true)
             this.onIframeLoad(item)
           })
@@ -134,12 +149,6 @@
             this.$set(iframeItem, 'isLoading', false)
           }
         }
-      },
-      async requestEngineList() {
-        const {data: engineList} = await this.$axios.get(this.$apiUrl('/engines'), {params: {}})
-        this.data.engineList = engineList
-        this.setActiveEngine()
-        this.loadSearchResult()
       },
     }
   }

@@ -1,3 +1,4 @@
 export default {
-  test: state => state.test,
+  engineList: state => state.engineList,
+  activeEngineList: state => state.activeEngineList,
 }

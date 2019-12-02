@@ -1,3 +1,4 @@
 export default {
-  test: ''
+  activeEngineList: localStorage.getItem('search/activeEngine') || [],
+  engineList: []
 }

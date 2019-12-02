@@ -1,7 +1,7 @@
 import VueRouter from 'vue-router'
 
-import IndexPage from '@/pages/index'
-import SearchPage from '@/pages/search'
+const IndexPage = () => import( '@/pages/index')
+const SearchPage = () => import('@/pages/search')
 
 const routes = [
   {
@@ -17,7 +17,7 @@ const routes = [
     name: 'search',
     component: SearchPage,
     meta: {
-      titleArray: ['%keyword','搜索']
+      titleArray: ['%keyword', '搜索']
     }
   },
 ]
@@ -32,12 +32,12 @@ router.beforeEach((to, from, next) => {
     document.title = to.meta.title
   }
   if (to.meta.titleArray) {
-    const attribute = { ...to.query,...to.params}
+    const attribute = {...to.query, ...to.params}
     const newTitleArray = to.meta.titleArray.map(textItem => {
-      if(textItem.includes('%') && attribute.hasOwnProperty(textItem.substr(1))) {
+      if (textItem.includes('%') && attribute.hasOwnProperty(textItem.substr(1))) {
         const attrText = attribute[textItem.substr(1)]
         const replaceText = attrText && attrText.length > 18 ? `${attrText.substring(0, 18)}...` : attrText
-        return textItem.replace(textItem,replaceText)
+        return textItem.replace(textItem, replaceText)
       }
       return textItem
     })
