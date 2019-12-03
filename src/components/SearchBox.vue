@@ -47,7 +47,7 @@
     },
     methods: {
       search() {
-        const keyword = this.form.keyword.replace(/\s/g, '')
+        const keyword = this.form.keyword.replace(/^\s+|\s+$/g, '')
         if (!keyword || keyword.length === 0) {
           this.$message.error('关键字不能为空')
           return

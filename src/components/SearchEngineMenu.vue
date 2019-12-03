@@ -6,9 +6,6 @@
         left: 0;
         right: 0;
         z-index: $z-index-modal;
-        display: flex;
-        flex-flow: row nowrap;
-        align-items: center;
 
         &__overlay {
             width: 100%;
@@ -21,11 +18,27 @@
             background-color: rgba(0, 0, 0, .2);
         }
 
-        &__list {
+        &__main {
+            position: fixed;
+            bottom: 0;
+            left: 40px;
+            right: 40px;
             background-color: #fff;
-            &__item {
+            display: flex;
+            flex-flow: row nowrap;
+            align-items: center;
+            height: 400px;
+            border-radius: 4px 4px 0 0 ;
+            box-shadow: 0 -2px 16px rgba(0,0,0,.1);
+            padding: 24px;
 
+            &__list {
+                overflow: auto;
+                &__item {
+
+                }
             }
+
         }
     }
 </style>
@@ -34,9 +47,11 @@
     <div class="engine">
         <div class="engine__overlay">
         </div>
-        <div class="engine__list">
-            <div v-for="item in engineList" :key="item.id" class="engine__list__item">
-                {{item}}
+        <div class="engine__main">
+            <div class="engine__main__list">
+                <div v-for="item in engineList" :key="item.id" class="engine__main__list__item">
+                    {{item.name}}
+                </div>
             </div>
         </div>
     </div>

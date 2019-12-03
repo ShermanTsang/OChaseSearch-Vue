@@ -100,9 +100,11 @@
 
 <script>
   import {mapGetters} from 'vuex'
+  import SearchEngineMenu from '../components/SearchEngineMenu'
 
   export default {
     name: 'Search',
+    components: {SearchEngineMenu},
     data() {
       return {
         status: {
@@ -111,31 +113,30 @@
       }
     },
     computed: {
-      ...mapGetters(['engineList', 'activeEngineList'])
+      activeEngineList() {
+        let activeEngineList = this.$store.getters.activeEngineList
+        if (!activeEngineList || activeEngineList.length === 0) {
+          activeEngineList = this.engineList.filter((item) => {
+            return ['bing', 'baidu'].includes(item.slug)
+          })
+          this.$store.commit('SET_ACTIVE_ENGINE_LIST', activeEngineList)
+        }
+        return activeEngineList
+      },
+      ...mapGetters(['engineList'])
     },
     mounted() {
-      this.checkActiveEngine()
       this.loadSearchResult()
     },
     methods: {
       getSearchEngineUrl(url) {
         return url.replace(new RegExp('%s'), this.$route.query.keyword)
       },
-      checkActiveEngine() {
-        if (!this.activeEngineList || this.activeEngineList.length === 0) {
-          const activeEngineList = this.engineList.filter((item) => {
-            return ['bing', 'baidu'].includes(item.slug)
-          })
-          this.$store.commit('SET_ACTIVE_ENGINE_LIST', activeEngineList)
-        }
-      },
       loadSearchResult() {
-        setTimeout(() => {
-          this.activeEngineList.forEach((item) => {
-            this.$set(item, 'isLoading', true)
-            this.onIframeLoad(item)
-          })
-        }, 0)
+        this.activeEngineList.forEach((item) => {
+          this.$set(item, 'isLoading', true)
+          this.onIframeLoad(item)
+        })
       },
       onIframeLoad(iframeItem) {
         const iframe = document.getElementById(`iframe-${iframeItem.slug}`)
