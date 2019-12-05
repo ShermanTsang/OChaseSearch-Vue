@@ -16,6 +16,7 @@
             right: 0;
             z-index: $z-index-overlay;
             background-color: rgba(0, 0, 0, .2);
+            box-shadow: 0 0 36px rgba(0, 0, 0, .4) inset;
         }
 
         &__main {
@@ -28,14 +29,17 @@
             flex-flow: row nowrap;
             align-items: center;
             height: 400px;
-            border-radius: 4px 4px 0 0 ;
-            box-shadow: 0 -2px 16px rgba(0,0,0,.1);
+            border-radius: 4px 4px 0 0;
+            box-shadow: 0 -2px 16px rgba(0, 0, 0, .1);
             padding: 24px;
 
             &__list {
                 overflow: auto;
-                &__item {
+                display: flex;
+                flex-flow: row wrap;
 
+                &__item {
+                    flex: 0 0 auto;
                 }
             }
 
@@ -67,7 +71,7 @@
       return {}
     },
     computed: {
-      ...mapGetters(['engineList', 'activeEngineList'])
+      ...mapGetters(['engineList'])
     },
     methods: {}
   }

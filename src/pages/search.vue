@@ -77,6 +77,7 @@
         <SearchHeader class="page__header">
             <SearchBox @on-search="loadSearchResult" />
         </SearchHeader>
+        <SearchEngineMenu v-if="status.showEngineMenu"/>
         <div class="page__main">
             <template v-if="activeEngineList && activeEngineList.length > 0">
                 <div v-for="item in activeEngineList" :key="item.slug" class="page__main__web">
@@ -108,7 +109,8 @@
     data() {
       return {
         status: {
-          isLoading: {}
+          isLoading: {},
+          showEngineMenu: false
         }
       }
     },
@@ -117,18 +119,26 @@
         let activeEngineList = this.$store.getters.activeEngineList
         if (!activeEngineList || activeEngineList.length === 0) {
           activeEngineList = this.engineList.filter((item) => {
-            return ['bing', 'baidu'].includes(item.slug)
+            return ['doge', 'baidu'].includes(item.slug)
           })
           this.$store.commit('SET_ACTIVE_ENGINE_LIST', activeEngineList)
         }
         return activeEngineList
       },
-      ...mapGetters(['engineList'])
+      ...mapGetters(['engineList', 'pullEngineListTime'])
     },
     mounted() {
+      this.requestEngineList()
       this.loadSearchResult()
     },
     methods: {
+      async requestEngineList() {
+        if(!this.pullEngineListTime || !this.engineList || this.engineList.length === 0) {
+          const {data: engineList} = await this.$axios.get(this.$apiUrl('/engines'), {params: {}})
+          this.$store.commit('SET_ENGINE_LIST',engineList)
+          this.$store.commit('SET_PULL_ENGINE_LIST_TIME', this.$time().format('YYYY-MM-DD HH:mm:ss'))
+        }
+      },
       getSearchEngineUrl(url) {
         return url.replace(new RegExp('%s'), this.$route.query.keyword)
       },

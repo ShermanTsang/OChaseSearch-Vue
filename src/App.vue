@@ -17,13 +17,8 @@
   export default {
     name: 'app',
     mounted() {
-      this.requestEngineList()
     },
     methods: {
-      async requestEngineList() {
-        const {data: engineList} = await this.$axios.get(this.$apiUrl('/engines'), {params: {}})
-        this.$store.commit('SET_ENGINE_LIST',engineList)
-      },
     }
   }
 </script>

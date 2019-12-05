@@ -36,12 +36,12 @@ router.beforeEach((to, from, next) => {
     const newTitleArray = to.meta.titleArray.map(textItem => {
       if (textItem.includes('%') && attribute.hasOwnProperty(textItem.substr(1))) {
         const attrText = attribute[textItem.substr(1)]
-        const replaceText = attrText && attrText.length > 18 ? `${attrText.substring(0, 18)}...` : attrText
-        return textItem.replace(textItem, replaceText)
+        const replaceText = (attrText && attrText.length > 18) ? `${attrText.substring(0, 18)}...` : attrText
+        return attrText ? textItem.replace(textItem, replaceText) : ''
       }
       return textItem
     })
-    document.title = newTitleArray.join(' - ')
+    document.title = newTitleArray.filter(item => item && item !== '').join(' - ')
   }
   next()
 })
