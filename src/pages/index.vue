@@ -10,13 +10,10 @@
   export default {
     name: 'Index',
     data() {
-      return {
-      }
+      return {}
     },
     mounted() {
     },
-    methods: {
-
-    }
+    methods: {}
   }
 </script>

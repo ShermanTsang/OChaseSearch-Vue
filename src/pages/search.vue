@@ -76,12 +76,17 @@
     <div class="page">
         <SearchHeader class="page__header">
             <SearchBox @on-search="loadSearchResult" />
+            <div slot="action">
+                <Icon name="setting" color="#999" size="1.4rem" @click="status.showEngineMenu = true"/>
+            </div>
         </SearchHeader>
-        <SearchEngineMenu v-if="status.showEngineMenu"/>
+        <Modal v-model="status.showEngineMenu" title="设置" icon="setting" contentPadding="0">
+            <SettingIndex activeTab="engine"/>
+        </Modal>
         <div class="page__main">
             <template v-if="activeEngineList && activeEngineList.length > 0">
                 <div v-for="item in activeEngineList" :key="item.slug" class="page__main__web">
-                    <Loading v-if="item.isLoading" :fix="true">
+                    <Loading v-if="status.isIframeLoading[item.slug]" :fix="true">
                         {{ item.name }}加载中...
                     </Loading>
                     <div class="page__main__web__iframe">
@@ -101,29 +106,27 @@
 
 <script>
   import {mapGetters} from 'vuex'
-  import SearchEngineMenu from '../components/SearchEngineMenu'
 
   export default {
     name: 'Search',
-    components: {SearchEngineMenu},
     data() {
       return {
         status: {
-          isLoading: {},
-          showEngineMenu: false
+          showEngineMenu: false,
+          isIframeLoading: {}
         }
       }
     },
     computed: {
       activeEngineList() {
-        let activeEngineList = this.$store.getters.activeEngineList
-        if (!activeEngineList || activeEngineList.length === 0) {
-          activeEngineList = this.engineList.filter((item) => {
-            return ['doge', 'baidu'].includes(item.slug)
-          })
-          this.$store.commit('SET_ACTIVE_ENGINE_LIST', activeEngineList)
+        let activeEngine = this.$store.getters.activeEngine
+        if (!activeEngine || activeEngine.length === 0) {
+          activeEngine = ['baidu','doge']
+          this.$store.commit('SET_ACTIVE_ENGINE', activeEngine)
         }
-        return activeEngineList
+        const activeEngineWithData = this.engineList.filter(item => ['baidu','doge'].includes(item.slug))
+        activeEngineWithData.sort((a, b) => activeEngine.indexOf(a.slug) - activeEngine.indexOf(b.slug))
+        return activeEngineWithData
       },
       ...mapGetters(['engineList', 'pullEngineListTime'])
     },
@@ -133,9 +136,9 @@
     },
     methods: {
       async requestEngineList() {
-        if(!this.pullEngineListTime || !this.engineList || this.engineList.length === 0) {
+        if (!this.pullEngineListTime || !this.engineList || this.engineList.length === 0) {
           const {data: engineList} = await this.$axios.get(this.$apiUrl('/engines'), {params: {}})
-          this.$store.commit('SET_ENGINE_LIST',engineList)
+          this.$store.commit('SET_ENGINE_LIST', engineList)
           this.$store.commit('SET_PULL_ENGINE_LIST_TIME', this.$time().format('YYYY-MM-DD HH:mm:ss'))
         }
       },
@@ -144,7 +147,7 @@
       },
       loadSearchResult() {
         this.activeEngineList.forEach((item) => {
-          this.$set(item, 'isLoading', true)
+          this.$set(this.status.isIframeLoading, item.slug, true)
           this.onIframeLoad(item)
         })
       },
@@ -153,11 +156,11 @@
         if (iframe.attachEvent) {
           // FOR IE
           iframe.attachEvent('onload', () => {
-            this.$set(iframeItem, 'isLoading', false)
+            this.$set(this.status.isIframeLoading, iframeItem.slug, false)
           })
         } else {
           iframe.onload = () => {
-            this.$set(iframeItem, 'isLoading', false)
+            this.$set(this.status.isIframeLoading, iframeItem.slug, false)
           }
         }
       },

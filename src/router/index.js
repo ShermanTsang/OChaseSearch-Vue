@@ -41,7 +41,9 @@ router.beforeEach((to, from, next) => {
       }
       return textItem
     })
-    document.title = newTitleArray.filter(item => item && item !== '').join(' - ')
+    document.title = newTitleArray.filter(item => {
+      return !item.includes('%')
+    }).join(' - ')
   }
   next()
 })
