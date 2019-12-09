@@ -1,7 +1,7 @@
 export default {
   modeRow: 1,
   modeCol: 2,
-  activeEngine: [],
+  activeEngineList: ['baidu','doge'],
   engineList: [],
   pullEngineListTime: null,
 }

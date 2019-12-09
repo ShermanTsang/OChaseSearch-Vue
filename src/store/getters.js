@@ -13,19 +13,11 @@ export default {
     }
     return []
   },
-  activeEngine(state) {
-    if (state.activeEngine && state.activeEngine.length > 0) {
-      return state.activeEngine
-    }
-    try {
-      const localCache = localStorage.getItem('config/activeEngine')
-      if (localCache) {
-        return JSON.parse(localCache)
-      }
-    } catch (e) {
-      return []
-    }
-    return []
+  activeEngineList(state,getters) {
+    const activeEngineList = state.activeEngineList
+    const activeEngineListWithData = getters.engineList.filter(item => activeEngineList.includes(item.slug))
+    activeEngineListWithData.sort((a, b) => activeEngineList.indexOf(a.slug) - activeEngineList.indexOf(b.slug))
+    return activeEngineListWithData
   },
   modeRow(state) {
     if (state.modeRow && state.modeRow.length > 0) {

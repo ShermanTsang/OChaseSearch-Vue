@@ -119,16 +119,9 @@
     },
     computed: {
       activeEngineList() {
-        let activeEngine = this.$store.getters.activeEngine
-        if (!activeEngine || activeEngine.length === 0) {
-          activeEngine = ['baidu','doge']
-          this.$store.commit('SET_ACTIVE_ENGINE', activeEngine)
-        }
-        const activeEngineWithData = this.engineList.filter(item => ['baidu','doge'].includes(item.slug))
-        activeEngineWithData.sort((a, b) => activeEngine.indexOf(a.slug) - activeEngine.indexOf(b.slug))
-        return activeEngineWithData
+        return this.activeEngineList
       },
-      ...mapGetters(['engineList', 'pullEngineListTime'])
+      ...mapGetters(['engineList','activeEngineList', 'pullEngineListTime'])
     },
     mounted() {
       this.requestEngineList()

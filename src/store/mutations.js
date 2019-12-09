@@ -7,10 +7,10 @@ export default {
       console.log(e)
     }
   },
-  ['SET_ACTIVE_ENGINE'](state, data) {
-    state.activeEngine = data
+  ['SET_ACTIVE_ENGINE_LIST'](state, data) {
+    state.activeEngineList = data
     try {
-      localStorage.setItem('data/activeEngine', JSON.stringify(data))
+      localStorage.setItem('data/activeEngineList', JSON.stringify(data))
     } catch (e) {
       console.log(e)
     }
