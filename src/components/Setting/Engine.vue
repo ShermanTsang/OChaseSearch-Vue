@@ -53,6 +53,7 @@
         }
       }
     },
-    methods: {}
+    methods: {
+    }
   }
 </script>

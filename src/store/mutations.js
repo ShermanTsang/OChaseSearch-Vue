@@ -10,23 +10,23 @@ export default {
   ['SET_ACTIVE_ENGINE_LIST'](state, data) {
     state.activeEngineList = data
     try {
-      localStorage.setItem('data/activeEngineList', JSON.stringify(data))
+      localStorage.setItem('config/activeEngineList', JSON.stringify(data))
     } catch (e) {
       console.log(e)
     }
   },
   ['SET_MODE_ROW'](state, data) {
-    state.modeRow = data
+    state.modeRow = parseInt(data)
     try {
-      localStorage.setItem('config/modeRow', JSON.stringify(data))
+      localStorage.setItem('config/modeRow', parseInt(data))
     } catch (e) {
       console.log(e)
     }
   },
   ['SET_MODE_COL'](state, data) {
-    state.modeRow = data
+    state.modeCol = parseInt(data)
     try {
-      localStorage.setItem('config/modeCol', JSON.stringify(data))
+      localStorage.setItem('config/modeCol', parseInt(data))
     } catch (e) {
       console.log(e)
     }

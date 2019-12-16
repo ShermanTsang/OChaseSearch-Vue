@@ -2,8 +2,8 @@ export default {
   setEngineList({commit}, data) {
     commit('SET_ENGINE_LIST', data)
   },
-  setActiveEngine({commit}, data) {
-    commit('SET_ACTIVE_ENGINE_LIST', data)
+  setActiveEngineArray({commit}, data) {
+    commit('SET_ACTIVE_ENGINE_ARRAY', data)
   },
   setModeCol({commit}, data) {
     commit('SET_MODE_COL', data)

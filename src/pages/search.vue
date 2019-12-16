@@ -38,8 +38,8 @@
                         content: '';
                         height: 100%;
                         width: 18px;
+                        border-left: 1px solid #efefef;
                         background-color: rgba(255, 255, 255, .8);
-                        box-shadow: -2px 0 6px rgba(177, 177, 177, .5);
                     }
 
                 }
@@ -69,6 +69,7 @@
             }
 
         }
+
     }
 </style>
 
@@ -118,9 +119,6 @@
       }
     },
     computed: {
-      activeEngineList() {
-        return this.activeEngineList
-      },
       ...mapGetters(['engineList','activeEngineList', 'pullEngineListTime'])
     },
     mounted() {
