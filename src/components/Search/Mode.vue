@@ -96,11 +96,11 @@
         <div class="mode__select">
             <div class="mode__select__item">
                 <label for="col">列数</label>
-                <input id="col" v-model.lazy="col" type="number">
+                <input id="col" v-model="col" type="number">
             </div>
             <div class="mode__select__item">
                 <label for="row">行数</label>
-                <input id="row" v-model.lazy="row" type="number">
+                <input id="row" v-model="row" type="number">
             </div>
         </div>
         <div class="mode__engine" :style="gridStyle">
@@ -112,7 +112,7 @@
                     {{activeEngineListWithData[number - 1].name}}
                 </div>
                 <div class="mode__engine__item__toolbar">
-                    <Icon name="delete" color="#999" @click="removeEngineItem(number)" />
+                    <Icon name="delete" color="#999" cursor="pointer" @click="removeEngineItem(number)" />
                 </div>
             </div>
         </div>
@@ -134,6 +134,10 @@
           return this.$store.getters.modeRow
         },
         set(value) {
+          if(value <= 0  || value > 2) {
+            this.$toast.error('行数设定范围1~2行')
+            return
+          }
           this.$store.commit('SET_MODE_ROW', value)
         }
       },
@@ -142,6 +146,10 @@
           return this.$store.getters.modeCol
         },
         set(value) {
+          if(value <= 0 || value > 4) {
+            this.$toast.error('列数设定范围1~4列')
+            return
+          }
           this.$store.commit('SET_MODE_COL', value)
         }
       },

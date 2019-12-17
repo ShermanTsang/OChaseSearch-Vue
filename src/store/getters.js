@@ -1,8 +1,6 @@
 export default {
   engineList(state) {
-    if (state.engineList && state.engineList.length > 0) {
-      return state.engineList
-    }
+    return (state.engineList && state.engineList.length > 0) ? state.engineList : []
   },
   activeEngineList(state, getters) {
     const activeEngineListWithData = getters.engineList.filter(item => state.activeEngineList.includes(item.slug))
@@ -10,14 +8,10 @@ export default {
     return activeEngineListWithData || []
   },
   modeRow(state) {
-    if (state.modeRow > 0) {
-      return state.modeRow
-    }
+    return state.modeRow > 0 ? state.modeRow : 0
   },
   modeCol(state) {
-    if (state.modeCol > 0) {
-      return state.modeCol
-    }
+    return state.modeCol > 0 ? state.modeCol : 0
   },
   pullEngineListTime(state) {
     const localCache = localStorage.getItem('config/pullEngineListTime')

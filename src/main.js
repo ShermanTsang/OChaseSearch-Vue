@@ -1,11 +1,16 @@
+// Kernel
 import Vue from 'vue'
-import App from '@/App.vue'
+// Official Packages
 import VueRouter from 'vue-router'
 import router from '@/router'
 import store from '@/store'
+// 3rd Packages
 import Axios from '@/api'
 import DayJs from 'dayjs'
 import {upperFirst, camelCase} from 'lodash'
+// Components
+import App from '@/App.vue'
+import Toast from '@/components/Toast.vue'
 
 Vue.use(VueRouter)
 
@@ -16,6 +21,24 @@ Vue.prototype.$apiUrl = (apiUrl) => {
     return apiUrl
   }
   return 'api' + apiUrl
+}
+Vue.prototype.$toast = {
+  info(text, callBack) {
+    if (!text) return
+    showToast('info', text, callBack)
+  },
+  success(text, callBack) {
+    if (!text) return
+    showToast('success', text, callBack)
+  },
+  error(text, callBack) {
+    if (!text) return
+    showToast('error', text, callBack)
+  },
+  warning(text, callBack) {
+    if (!text) return
+    showToast('warning', text, callBack)
+  }
 }
 
 Vue.config.productionTip = false
@@ -52,3 +75,26 @@ new Vue({
   router,
   render: h => h(App),
 }).$mount('#app')
+
+function showToast(type, text, icon = 'info', duration = 4000, callBack) {
+  const ToastConstructor = Vue.extend(Toast)
+  const toastDom = new ToastConstructor({
+    el: document.createElement('div'),
+    data() {
+      return {
+        type,
+        icon,
+        text,
+        isShow: true
+      }
+    }
+  })
+  document.body.appendChild(toastDom.$el)
+  setTimeout(() => {
+    toastDom.isShow = false
+    callBack && (typeof callBack === 'function') && callBack()
+  }, duration)
+  setTimeout(() => {
+    document.body.removeChild(toastDom.$el)
+  }, duration + 1000)
+}

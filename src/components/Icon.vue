@@ -25,13 +25,18 @@
       size: {
         type: String,
         default: null
+      },
+      cursor: {
+        type: String,
+        default: 'default'
       }
     },
     computed: {
       style() {
         return {
           color: this.color,
-          fontSize: this.size
+          fontSize: this.size,
+          cursor: this.cursor
         }
       }
     }
