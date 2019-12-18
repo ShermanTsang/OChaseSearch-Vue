@@ -77,10 +77,10 @@
                     <Icon v-if="icon" :name="icon" />
                     {{ title }}
                     <span class="modal__container__header__close" @click="toggleModalStatus()">
-            <Icon name="close" />
+            <Icon name="close" cursor="pointer"/>
           </span>
                 </div>
-                <div class="modal__container__content" style="contentStyle">
+                <div class="modal__container__content" :style="contentStyle">
                     <slot />
                 </div>
                 <div v-if="$slots.footer" class="modal__container__footer">

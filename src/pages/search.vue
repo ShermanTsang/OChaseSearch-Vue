@@ -2,15 +2,15 @@
     .page {
 
         &__main {
-            display: flex;
-            flex-flow: row nowrap;
+            display: grid;
+            grid-column-gap: 0;
             padding-top: 64px;
             height: 100vh;
 
             &__web {
                 position: relative;
                 width: 100%;
-                flex-grow: 1;
+                border: 1px solid #eee;
 
                 &__iframe {
                     position: relative;
@@ -18,7 +18,6 @@
                     width: 100%;
                     height: 100%;
                     transition: opacity .1s ease-in-out;
-                    border: 1px solid #eee;
 
                     iframe {
                         width: 100%;
@@ -78,13 +77,14 @@
         <SearchHeader class="page__header">
             <SearchBox @on-search="loadSearchResult" />
             <div slot="action">
-                <Icon name="setting" color="#999" size="1.4rem" @click="status.showEngineMenu = true"/>
+                <Icon name="setting" cursor="pointer" color="#999" size="1.4rem"
+                      @click="status.showEngineMenu = true" />
             </div>
         </SearchHeader>
         <Modal v-model="status.showEngineMenu" title="设置" icon="setting" contentPadding="0">
-            <SettingIndex activeTab="engine"/>
+            <SettingIndex activeTab="engine" />
         </Modal>
-        <div class="page__main">
+        <div class="page__main" :style="gridStyle">
             <template v-if="activeEngineList && activeEngineList.length > 0">
                 <div v-for="item in activeEngineList" :key="item.slug" class="page__main__web">
                     <Loading v-if="status.isIframeLoading[item.slug]" :fix="true">
@@ -119,7 +119,13 @@
       }
     },
     computed: {
-      ...mapGetters(['engineList','activeEngineList', 'pullEngineListTime'])
+      gridStyle() {
+        return {
+          'grid-template-columns': `repeat(${this.modeCol}, 1fr)`,
+          'grid-template-rows': `repeat(${this.modeRow}, 1fr)`
+        }
+      },
+      ...mapGetters(['modeCol', 'modeRow', 'engineList', 'activeEngineList', 'pullEngineListTime'])
     },
     mounted() {
       this.requestEngineList()

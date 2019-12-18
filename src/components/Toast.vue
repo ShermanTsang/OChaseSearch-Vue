@@ -49,7 +49,7 @@
     data() {
       return {
         text: '',
-        icon: 'info',
+        icon: 'info-circle',
         type: 'info',
         isShow: false
       }

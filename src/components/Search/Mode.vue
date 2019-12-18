@@ -63,6 +63,7 @@
                     font-weight: 500;
                     color: rgba(177, 177, 177, .2);
                     display: block;
+                    cursor: default;
                 }
 
                 &__toolbar {
@@ -96,11 +97,11 @@
         <div class="mode__select">
             <div class="mode__select__item">
                 <label for="col">列数</label>
-                <input id="col" v-model="col" type="number">
+                <input id="col" v-model="col" type="number" min="1" max="4" @input="checkInputLength($event.target)">
             </div>
             <div class="mode__select__item">
                 <label for="row">行数</label>
-                <input id="row" v-model="row" type="number">
+                <input id="row" v-model="row" type="number" min="1" max="2" @input="checkInputLength($event.target)">
             </div>
         </div>
         <div class="mode__engine" :style="gridStyle">
@@ -108,12 +109,12 @@
                 <div class="mode__engine__item__order">
                     {{number}}
                 </div>
-                <div v-if="activeEngineListWithData && activeEngineListWithData[number - 1]">
+                <template v-if="activeEngineListWithData && activeEngineListWithData[number - 1]">
                     {{activeEngineListWithData[number - 1].name}}
-                </div>
-                <div class="mode__engine__item__toolbar">
-                    <Icon name="delete" color="#999" cursor="pointer" @click="removeEngineItem(number)" />
-                </div>
+                    <div class="mode__engine__item__toolbar">
+                        <Icon name="delete" color="#999" cursor="pointer" @click="removeEngineItem(number)" />
+                    </div>
+                </template>
             </div>
         </div>
     </div>
@@ -134,10 +135,6 @@
           return this.$store.getters.modeRow
         },
         set(value) {
-          if(value <= 0  || value > 2) {
-            this.$toast.error('行数设定范围1~2行')
-            return
-          }
           this.$store.commit('SET_MODE_ROW', value)
         }
       },
@@ -146,10 +143,6 @@
           return this.$store.getters.modeCol
         },
         set(value) {
-          if(value <= 0 || value > 4) {
-            this.$toast.error('列数设定范围1~4列')
-            return
-          }
           this.$store.commit('SET_MODE_COL', value)
         }
       },
@@ -167,8 +160,13 @@
     methods: {
       removeEngineItem(number) {
         const activeEngineList = this.activeEngineList
-        activeEngineList.splice(number - 1,1,'')
-        this.$store.commit('SET_ACTIVE_ENGINE_LIST',activeEngineList)
+        activeEngineList.splice(number - 1, 1, '')
+        this.$store.commit('SET_ACTIVE_ENGINE_LIST', activeEngineList)
+      },
+      checkInputLength({value, min, max}) {
+        if (value <= (min + 1) || value >= (max - 1)) {
+          this.$toast.info(`行数设定范围${min}~${max}行`)
+        }
       }
     }
   }
