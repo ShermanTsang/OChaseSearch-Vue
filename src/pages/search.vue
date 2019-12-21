@@ -86,17 +86,22 @@
         </Modal>
         <div class="page__main" :style="gridStyle">
             <template v-if="activeEngineList && activeEngineList.length > 0">
-                <div v-for="item in activeEngineList" :key="item.slug" class="page__main__web">
-                    <Loading v-if="status.isIframeLoading[item.slug]" :fix="true">
-                        {{ item.name }}加载中...
+                <div v-for="number in (modeCol * modeRow)" :key="number" class="page__main__web">
+                    <Loading v-if="status.isIframeLoading[getEngineItem(number).slug]" :fix="true">
+                        {{ getEngineItem(number).name }}加载中...
                     </Loading>
                     <div class="page__main__web__iframe">
-                        <iframe :id="`iframe-${item.slug}`" :src="getSearchEngineUrl(item.url)"
-                                allowtransparency></iframe>
+                        <iframe v-if="getEngineItem(number).url" :id="`iframe-${getEngineItem(number).slug}`"
+                                :src="getSearchEngineUrl(getEngineItem(number).url)" allowtransparency></iframe>
                     </div>
                     <div class="page__main__web__toolbar">
                         <div class="page__main__web__toolbar__info">
-                            <span>{{ item.category }} /</span> {{ item.name }}
+                            <template v-if="getEngineItem(number).slug">
+                                <span>{{ getEngineItem(number).category }} /</span> {{ getEngineItem(number).name }}
+                            </template>
+                            <template v-else>
+                                未设定
+                            </template>
                         </div>
                     </div>
                 </div>
@@ -142,22 +147,29 @@
       getSearchEngineUrl(url) {
         return url.replace(new RegExp('%s'), this.$route.query.keyword)
       },
+      getEngineItem(number) {
+        return this.activeEngineList[number - 1] || {}
+      },
       loadSearchResult() {
-        this.activeEngineList.forEach((item) => {
-          this.$set(this.status.isIframeLoading, item.slug, true)
-          this.onIframeLoad(item)
+        this.activeEngineList.forEach(item => {
+          if (item.url) {
+            this.$set(this.status.isIframeLoading, item.slug, true)
+            this.onIframeLoad(item)
+          }
         })
       },
       onIframeLoad(iframeItem) {
         const iframe = document.getElementById(`iframe-${iframeItem.slug}`)
-        if (iframe.attachEvent) {
-          // FOR IE
-          iframe.attachEvent('onload', () => {
-            this.$set(this.status.isIframeLoading, iframeItem.slug, false)
-          })
-        } else {
-          iframe.onload = () => {
-            this.$set(this.status.isIframeLoading, iframeItem.slug, false)
+        if (iframe) {
+          if (iframe.attachEvent) {
+            // FOR IE
+            iframe.attachEvent('onload', () => {
+              this.$set(this.status.isIframeLoading, iframeItem.slug, false)
+            })
+          } else {
+            iframe.onload = () => {
+              this.$set(this.status.isIframeLoading, iframeItem.slug, false)
+            }
           }
         }
       },
