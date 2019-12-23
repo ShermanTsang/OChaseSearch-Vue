@@ -159,9 +159,8 @@
     },
     methods: {
       removeEngineItem(number) {
-        const activeEngineList = this.activeEngineList
-        activeEngineList.splice(number - 1, 1, '')
-        this.$store.commit('SET_ACTIVE_ENGINE_LIST', activeEngineList)
+        this.activeEngineList.splice(number - 1,1,'')
+        this.$store.commit('SET_ACTIVE_ENGINE_LIST', this.activeEngineList)
       },
       checkInputLength({value, min, max}) {
         if (value <= (min + 1) || value >= (max - 1)) {

@@ -3,13 +3,11 @@ export default {
     return (state.engineList && state.engineList.length > 0) ? state.engineList : []
   },
   activeEngineList(state, getters) {
-    const activeEngineListWithData = []
-    state.activeEngineList.forEach(itemSlug => {
+    const activeEngineListWithData = new Array(state.modeCol * state.modeRow).fill({})
+    state.activeEngineList.forEach((itemSlug,index) => {
       const matchEngineItem = getters.engineList.find(item => item.slug === itemSlug)
-      activeEngineListWithData.push(matchEngineItem || {})
+      activeEngineListWithData.splice(index,1,matchEngineItem || {})
     })
-    // const activeEngineListWithData = getters.engineList.filter(item => state.activeEngineList.includes(item.slug))
-    // activeEngineListWithData.sort((a, b) => state.activeEngineList.indexOf(a.slug) - state.activeEngineList.indexOf(b.slug))
     return activeEngineListWithData || []
   },
   modeRow(state) {

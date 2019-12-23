@@ -10,6 +10,8 @@
             &__web {
                 position: relative;
                 width: 100%;
+                margin-left: -1px;
+                margin-top: -1px;
                 border: 1px solid #eee;
 
                 &__iframe {

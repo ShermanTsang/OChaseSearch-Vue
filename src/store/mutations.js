@@ -8,25 +8,37 @@ export default {
     }
   },
   ['SET_ACTIVE_ENGINE_LIST'](state, data) {
-    state.activeEngineList = data
+    const activeEngineArray = new Array(state.modeCol * state.modeRow).fill('')
+    activeEngineArray.splice(0, data.length, ...data)
+    state.activeEngineList = activeEngineArray
     try {
-      localStorage.setItem('config/activeEngineList', JSON.stringify(data))
+      localStorage.setItem('config/activeEngineList', JSON.stringify(activeEngineArray))
     } catch (e) {
       console.log(e)
     }
   },
-  ['SET_MODE_ROW'](state, data) {
-    state.modeRow = parseInt(data)
+  ['SET_MODE_ROW'](state, rowNum) {
+    state.modeRow = Number.parseInt(rowNum)
+    const fillLength = (rowNum * state.modeCol) - state.activeEngineList.length
+    if (fillLength > 0) {
+      const filledActiveList = [...state.activeEngineList, ...Array(fillLength).fill('')]
+      this.commit('SET_ACTIVE_ENGINE_LIST', filledActiveList)
+    }
     try {
-      localStorage.setItem('config/modeRow', parseInt(data))
+      localStorage.setItem('config/modeRow', JSON.stringify(Number.parseInt(rowNum)))
     } catch (e) {
       console.log(e)
     }
   },
-  ['SET_MODE_COL'](state, data) {
-    state.modeCol = parseInt(data)
+  ['SET_MODE_COL'](state, colNum) {
+    state.modeCol = Number.parseInt(colNum)
+    const fillLength = (colNum * state.modeRow) - state.activeEngineList.length
+    if (fillLength > 0) {
+      const filledActiveList = [...state.activeEngineList, ...Array(fillLength).fill('')]
+      this.commit('SET_ACTIVE_ENGINE_LIST', filledActiveList)
+    }
     try {
-      localStorage.setItem('config/modeCol', parseInt(data))
+      localStorage.setItem('config/modeCol', JSON.stringify(Number.parseInt(colNum)))
     } catch (e) {
       console.log(e)
     }

@@ -26,7 +26,7 @@
         <div class="engine__main">
             <Nameplate>搜索引擎列表</Nameplate>
             <div class="engine__main__list">
-                <SearchEngineItem v-for="item in engineList" :id="item.slug" :key="item.id" :item="item" />
+                <SearchEngineItem v-for="item in engineList" :key="item.id" :item="item" />
             </div>
         </div>
         <div class="engine__layout">
@@ -37,6 +37,8 @@
 </template>
 
 <script>
+  import {mapState} from 'vuex'
+
   export default {
     name: 'SettingEngine',
     props: {},
@@ -44,14 +46,10 @@
       return {}
     },
     computed: {
-      engineList: {
-        get() {
-          return this.$store.getters.engineList
-        },
-        set(value) {
-          this.$store.commit('SET_ENGINE_LIST', value)
-        }
-      }
+      engineList() {
+        return this.$store.getters.engineList.filter(engineItem => !this.activeEngineList.includes(engineItem.slug))
+      },
+      ...mapState(['activeEngineList'])
     },
     methods: {
     }

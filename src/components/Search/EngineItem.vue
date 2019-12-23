@@ -105,9 +105,8 @@
     },
     methods: {
       setEngine(number) {
-        const activeEngineList = this.activeEngineList
-        activeEngineList.splice(number - 1,1,this.item.slug)
-        this.$store.commit('SET_ACTIVE_ENGINE_LIST',activeEngineList)
+        this.activeEngineList.splice(number - 1,1,this.item.slug)
+        this.$store.commit('SET_ACTIVE_ENGINE_LIST',this.activeEngineList)
       }
     }
   }
