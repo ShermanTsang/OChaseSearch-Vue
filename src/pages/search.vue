@@ -64,6 +64,13 @@
                             font-size: .85rem;
                             color: #999;
                         }
+
+                        &__right {
+                            float: right;
+                            color: #999;
+                            font-size: .8rem;
+                            letter-spacing: 1px;
+                        }
                     }
                 }
 
@@ -77,7 +84,7 @@
 <template>
     <div class="page">
         <SearchHeader class="page__header">
-            <SearchBox @on-search="loadSearchResult" />
+            <SearchBox @on-search="loadIframe" />
             <div slot="action">
                 <Icon name="setting" cursor="pointer" color="#999" size="1.4rem"
                       @click="status.showEngineMenu = true" />
@@ -100,6 +107,7 @@
                         <div class="page__main__web__toolbar__info">
                             <template v-if="getEngineItem(number).slug">
                                 <span>{{ getEngineItem(number).category }} /</span> {{ getEngineItem(number).name }}
+                                <span v-if="!status.isIframeLoading[getEngineItem(number).slug]" class="page__main__web__toolbar__info__right">{{status.iframeLoadingTime[getEngineItem(number).slug] | second}}秒加载</span>
                             </template>
                             <template v-else>
                                 未设定
@@ -117,11 +125,17 @@
 
   export default {
     name: 'Search',
+    filters: {
+      second(value) {
+        return (value / 1000).toFixed(2)
+      }
+    },
     data() {
       return {
         status: {
           showEngineMenu: false,
-          isIframeLoading: {}
+          isIframeLoading: {},
+          iframeLoadingTime: {}
         }
       }
     },
@@ -136,7 +150,7 @@
     },
     mounted() {
       this.requestEngineList()
-      this.loadSearchResult()
+      this.loadIframe()
     },
     methods: {
       async requestEngineList() {
@@ -152,28 +166,30 @@
       getEngineItem(number) {
         return this.activeEngineList[number - 1] || {}
       },
-      loadSearchResult() {
+      loadIframe() {
         this.activeEngineList.forEach(item => {
           if (item.url) {
             this.$set(this.status.isIframeLoading, item.slug, true)
-            this.onIframeLoad(item)
-          }
-        })
-      },
-      onIframeLoad(iframeItem) {
-        const iframe = document.getElementById(`iframe-${iframeItem.slug}`)
-        if (iframe) {
-          if (iframe.attachEvent) {
-            // FOR IE
-            iframe.attachEvent('onload', () => {
-              this.$set(this.status.isIframeLoading, iframeItem.slug, false)
-            })
-          } else {
-            iframe.onload = () => {
-              this.$set(this.status.isIframeLoading, iframeItem.slug, false)
+            this.$set(this.status.iframeLoadingTime, item.slug, this.$time().valueOf())
+            const iframe = document.getElementById(`iframe-${item.slug}`)
+            if (iframe) {
+              if (iframe.attachEvent) {
+                // FOR IE
+                iframe.attachEvent('onload', () => {
+                  this.$set(this.status.isIframeLoading, item.slug, false)
+                  const timeGap = this.$time().valueOf() - this.status.iframeLoadingTime[item.slug]
+                  this.$set(this.status.iframeLoadingTime, item.slug, timeGap)
+                })
+              } else {
+                iframe.onload = () => {
+                  this.$set(this.status.isIframeLoading, item.slug, false)
+                  const timeGap = this.$time().valueOf() - this.status.iframeLoadingTime[item.slug]
+                  this.$set(this.status.iframeLoadingTime, item.slug, timeGap)
+                }
+              }
             }
           }
-        }
+        })
       },
     }
   }
