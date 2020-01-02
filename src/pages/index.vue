@@ -2,7 +2,7 @@
 </style>
 
 <template>
-    <div class="page">
+    <div class="index">
     </div>
 </template>
 
@@ -10,7 +10,8 @@
   export default {
     name: 'Index',
     data() {
-      return {}
+      return {
+      }
     },
     mounted() {
     },

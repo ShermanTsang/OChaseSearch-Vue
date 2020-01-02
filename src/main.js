@@ -8,6 +8,7 @@ import store from '@/store'
 import Axios from '@/api'
 import DayJs from 'dayjs'
 import {upperFirst, camelCase} from 'lodash'
+import { createProvider } from './vue-apollo'
 // Components
 import App from '@/App.vue'
 import Toast from '@/components/Toast.vue'
@@ -73,7 +74,8 @@ nextComponents.keys().forEach(fileName => {
 new Vue({
   store,
   router,
-  render: h => h(App),
+  apolloProvider: createProvider(),
+  render: h => h(App)
 }).$mount('#app')
 
 function showToast(type, text, icon = 'info', duration = 4000, callBack) {

@@ -2,6 +2,7 @@ import VueRouter from 'vue-router'
 
 const IndexPage = () => import( '@/pages/index')
 const SearchPage = () => import('@/pages/search')
+const TestPage = () => import('@/pages/test')
 
 const routes = [
   {
@@ -18,6 +19,14 @@ const routes = [
     component: SearchPage,
     meta: {
       titleArray: ['%keyword', '搜索']
+    }
+  },
+  {
+    path: '/test',
+    name: 'test',
+    component: TestPage,
+    meta: {
+      title: '测试'
     }
   },
 ]

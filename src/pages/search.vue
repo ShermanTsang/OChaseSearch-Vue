@@ -107,7 +107,8 @@
                         <div class="page__main__web__toolbar__info">
                             <template v-if="getEngineItem(number).slug">
                                 <span>{{ getEngineItem(number).category }} /</span> {{ getEngineItem(number).name }}
-                                <span v-if="!status.isIframeLoading[getEngineItem(number).slug]" class="page__main__web__toolbar__info__right">{{status.iframeLoadingTime[getEngineItem(number).slug] | second}}秒加载</span>
+                                <span v-if="!status.isIframeLoading[getEngineItem(number).slug]"
+                                      class="page__main__web__toolbar__info__right">{{status.iframeLoadingTime[getEngineItem(number).slug] | second}}秒加载</span>
                             </template>
                             <template v-else>
                                 未设定
@@ -122,6 +123,7 @@
 
 <script>
   import {mapGetters} from 'vuex'
+  import gql from 'graphql-tag'
 
   export default {
     name: 'Search',
@@ -155,7 +157,7 @@
     methods: {
       async requestEngineList() {
         if (!this.pullEngineListTime || !this.engineList || this.engineList.length === 0) {
-          const {data: engineList} = await this.$axios.get(this.$apiUrl('/engines'), {params: {}})
+          const {data: {engineList}} = await this.$apollo.query({query: gql`query {engineList:engines{id name slug url}}`})
           this.$store.commit('SET_ENGINE_LIST', engineList)
           this.$store.commit('SET_PULL_ENGINE_LIST_TIME', this.$time().format('YYYY-MM-DD HH:mm:ss'))
         }
