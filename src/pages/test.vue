@@ -3,40 +3,48 @@
 
 <template>
     <div class="page">
-        <span v-if="$apollo.queries.engines.loading">loading...</span>
-        {{engines}}
-        <br>
-        {{users}}
+        <span v-if="$apollo.queries.engineList.loading">loading...</span>
+        {{engineList}}
+        <hr>
+        <ApolloQuery :query="queries.engineList" class="test">
+            <template v-slot="{ result: { loading, error, data } }">
+                <!-- Loading -->
+                <div v-if="loading" class="loading apollo">Loading...</div>
+
+                <!-- Error -->
+                <div v-else-if="error" class="error apollo">An error occured</div>
+
+                <!-- Result -->
+                <div v-else-if="data" class="result apollo">{{ data }}</div>
+
+                <!-- No result -->
+                <div v-else class="no-result apollo">No result</div>
+            </template>
+        </ApolloQuery>
     </div>
 </template>
 
 <script>
   import gql from 'graphql-tag'
+  import queries from '@/graphql/queries'
 
   export default {
     name: 'Test',
     apollo: {
-      engines: {
-        query: gql`query {engines{name}}`,
-      },
-      users: {
-        query: gql`query {users{data{name}}}`
+      engineList: {
+        query: queries.engineList
       }
     },
     data() {
       return {
-        engines: [],
-        users: []
+        queries,
+        engineList: [],
       }
     },
     mounted() {
-      this.test()
     },
     methods: {
       async test() {
-        // const res = await this.$apollo.query({query: gql`query {engines{data{name}}}`})
-        const {data: {engineList}} = await this.$apollo.query({query: gql`query {engineList:engines{id name slug url}}`})
-        console.log(engineList)
       }
     }
   }

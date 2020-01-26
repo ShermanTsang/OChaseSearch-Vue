@@ -106,7 +106,7 @@
                     <div class="page__main__web__toolbar">
                         <div class="page__main__web__toolbar__info">
                             <template v-if="getEngineItem(number).slug">
-                                <span>{{ getEngineItem(number).category }} /</span> {{ getEngineItem(number).name }}
+                                <span>{{ getEngineItem(number).category}} /</span> {{ getEngineItem(number).name }}
                                 <span v-if="!status.isIframeLoading[getEngineItem(number).slug]"
                                       class="page__main__web__toolbar__info__right">{{status.iframeLoadingTime[getEngineItem(number).slug] | second}}秒加载</span>
                             </template>
@@ -123,7 +123,7 @@
 
 <script>
   import {mapGetters} from 'vuex'
-  import gql from 'graphql-tag'
+  import queries from '@/graphql/queries'
 
   export default {
     name: 'Search',
@@ -157,7 +157,7 @@
     methods: {
       async requestEngineList() {
         if (!this.pullEngineListTime || !this.engineList || this.engineList.length === 0) {
-          const {data: {engineList}} = await this.$apollo.query({query: gql`query {engineList:engines{id name slug url}}`})
+          const {data: {engineList}} = await this.$apollo.query({query: queries.engineList})
           this.$store.commit('SET_ENGINE_LIST', engineList)
           this.$store.commit('SET_PULL_ENGINE_LIST_TIME', this.$time().format('YYYY-MM-DD HH:mm:ss'))
         }
