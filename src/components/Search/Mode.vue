@@ -109,10 +109,10 @@
                 <div class="mode__engine__item__order">
                     {{number}}
                 </div>
-                <template v-if="activeEngineListWithData && activeEngineListWithData[number - 1]">
+                <template v-if="activeEngineListWithData && activeEngineListWithData[number - 1] && activeEngineListWithData[number - 1].name">
                     {{activeEngineListWithData[number - 1].name}}
                     <div class="mode__engine__item__toolbar">
-                        <Icon name="delete" color="#999" cursor="pointer" @click="removeEngineItem(number)" />
+                        <Icon name="delete" color="#999" cursor="pointer" @click="removeEngineItem(number)"/>
                     </div>
                 </template>
             </div>

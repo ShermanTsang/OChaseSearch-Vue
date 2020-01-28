@@ -1,6 +1,4 @@
-<style lang="scss">
-  @import '../assets/iconfont/iconfont.css';
-
+<style lang="scss" scoped>
   .iconfont {
     letter-spacing: 1px;
   }
@@ -11,6 +9,8 @@
 </template>
 
 <script>
+  import '../assets/iconfont/iconfont.css'
+
   export default {
     name: 'Icon',
     props: {

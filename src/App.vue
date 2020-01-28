@@ -1,4 +1,4 @@
-<style lang="scss">
+<style lang="scss" scoped>
     #app {
         display: flex;
         min-height: 100vh;
@@ -14,6 +14,8 @@
 </template>
 
 <script>
+  import 'normalize.css'
+
   export default {
     name: 'app',
     mounted() {

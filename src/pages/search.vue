@@ -1,4 +1,4 @@
-<style lang="scss">
+<style lang="scss" scoped>
     .page {
 
         &__main {
@@ -106,7 +106,7 @@
                     <div class="page__main__web__toolbar">
                         <div class="page__main__web__toolbar__info">
                             <template v-if="getEngineItem(number).slug">
-                                <span>{{ getEngineItem(number).category}} /</span> {{ getEngineItem(number).name }}
+                                <span>{{ getEngineItem(number).category.name}} /</span> {{ getEngineItem(number).name }}
                                 <span v-if="!status.isIframeLoading[getEngineItem(number).slug]"
                                       class="page__main__web__toolbar__info__right">{{status.iframeLoadingTime[getEngineItem(number).slug] | second}}秒加载</span>
                             </template>
@@ -150,9 +150,15 @@
       },
       ...mapGetters(['modeCol', 'modeRow', 'engineList', 'activeEngineList', 'pullEngineListTime'])
     },
+    watch: {
+      activeEngineList(oldVal,newVal) {
+        const newSlugArray = newVal.map(item => item.slug)
+        const diffEngineList = oldVal.filter(item => !newSlugArray.includes(item.slug))
+        this.loadIframe(diffEngineList)
+      }
+    },
     mounted() {
       this.requestEngineList()
-      this.loadIframe()
     },
     methods: {
       async requestEngineList() {
@@ -161,6 +167,7 @@
           this.$store.commit('SET_ENGINE_LIST', engineList)
           this.$store.commit('SET_PULL_ENGINE_LIST_TIME', this.$time().format('YYYY-MM-DD HH:mm:ss'))
         }
+        this.loadIframe()
       },
       getSearchEngineUrl(url) {
         return url.replace(new RegExp('%s'), this.$route.query.keyword)
@@ -168,31 +175,37 @@
       getEngineItem(number) {
         return this.activeEngineList[number - 1] || {}
       },
-      loadIframe() {
-        this.activeEngineList.forEach(item => {
-          if (item.url) {
-            this.$set(this.status.isIframeLoading, item.slug, true)
-            this.$set(this.status.iframeLoadingTime, item.slug, this.$time().valueOf())
-            const iframe = document.getElementById(`iframe-${item.slug}`)
-            if (iframe) {
-              if (iframe.attachEvent) {
-                // FOR IE
-                iframe.attachEvent('onload', () => {
-                  this.$set(this.status.isIframeLoading, item.slug, false)
-                  const timeGap = this.$time().valueOf() - this.status.iframeLoadingTime[item.slug]
-                  this.$set(this.status.iframeLoadingTime, item.slug, timeGap)
-                })
-              } else {
-                iframe.onload = () => {
-                  this.$set(this.status.isIframeLoading, item.slug, false)
-                  const timeGap = this.$time().valueOf() - this.status.iframeLoadingTime[item.slug]
-                  this.$set(this.status.iframeLoadingTime, item.slug, timeGap)
-                }
-              }
+      loadIframe(engineList = this.activeEngineList || []) {
+        this.$nextTick(() => {
+          for(const item of engineList) {
+            if (item.url) {
+              this.initIframeItem(item.slug)
             }
           }
         })
       },
+      initIframeItem(slug) {
+        this.$set(this.status.isIframeLoading, slug, true)
+        this.$set(this.status.iframeLoadingTime, slug, this.$time().valueOf())
+
+        const iframe = document.getElementById(`iframe-${slug}`)
+        if (iframe) {
+          if (iframe.attachEvent) {
+            // FOR IE
+            iframe.attachEvent('onload', () => {
+              this.$set(this.status.isIframeLoading, slug, false)
+              const timeGap = this.$time().valueOf() - this.status.iframeLoadingTime[slug]
+              this.$set(this.status.iframeLoadingTime, slug, timeGap)
+            })
+          } else {
+            iframe.onload = () => {
+              this.$set(this.status.isIframeLoading, slug, false)
+              const timeGap = this.$time().valueOf() - this.status.iframeLoadingTime[slug]
+              this.$set(this.status.iframeLoadingTime, slug, timeGap)
+            }
+          }
+        }
+      }
     }
   }
 </script>

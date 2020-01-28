@@ -1,4 +1,4 @@
-<style lang="scss">
+<style lang="scss" scoped>
     .modal {
         z-index: $z-index-modal;
         position: fixed;

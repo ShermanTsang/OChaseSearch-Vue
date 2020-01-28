@@ -10,7 +10,7 @@ function getStateValueByCache(cacheKey,valueType,defaultValue) {
     return JSON.parse(localCache) || defaultValue
   }
   if(valueType === 'string') {
-    return localCache || defaultValue
+    return localCache.toString() || defaultValue
   }
 }
 

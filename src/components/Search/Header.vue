@@ -39,7 +39,7 @@
 <template>
     <header class="header">
         <div class="header__container">
-            <div class="header__logo">
+            <div class="header__logo" @click="$router.push({name:'index'})">
                 <Logo type="text">逐搜</Logo>
             </div>
             <div class="header__search">

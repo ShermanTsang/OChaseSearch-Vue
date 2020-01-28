@@ -1,5 +1,5 @@
 <style lang="scss" scoped>
-    .engine-item {
+    .engine-card {
         position: relative;
         padding: 24px 16px;
         background-color: rgba(177, 177, 177, .1);
@@ -52,7 +52,7 @@
         }
 
         &:hover {
-            .engine-item__action {
+            .engine-card__action {
                 height: 100%;
                 bottom: 0;
             }
@@ -61,16 +61,16 @@
 </style>
 
 <template>
-    <div class="engine-item">
-        <div class="engine-item__icon">
+    <div class="engine-card">
+        <div class="engine-card__icon">
         </div>
-        <div class="engine-item__main">
+        <div class="engine-card__main">
             {{item.name}}
             <br>
             <small>{{item.slug}}</small>
         </div>
-        <div class="engine-item__action" :style="gridStyle">
-            <div v-for="number in modeCol*modeRow" :key="number" class="engine-item__action__item" @click="setEngine(number)">
+        <div class="engine-card__action" :style="gridStyle">
+            <div v-for="number in modeCol*modeRow" :key="number" class="engine-card__action__item" @click="setEngine(number)">
                 {{number}}
             </div>
         </div>
@@ -81,7 +81,7 @@
   import {mapGetters, mapState} from 'vuex'
 
   export default {
-    name: 'SearchEngineItem',
+    name: 'SearchEngineCard',
     props: {
       item: {
         type: Object,

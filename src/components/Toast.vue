@@ -1,4 +1,4 @@
-<style lang="scss">
+<style lang="scss" scoped>
     .toast {
         position: fixed;
         bottom: 40px;

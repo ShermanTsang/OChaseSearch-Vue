@@ -1,7 +1,7 @@
 import VueRouter from 'vue-router'
 
 const IndexPage = () => import( '@/pages/index')
-const SearchPage = () => import('@/pages/search')
+const SearchPage = () => import( '@/pages/search')
 const TestPage = () => import('@/pages/test')
 
 const routes = [
@@ -10,7 +10,7 @@ const routes = [
     name: 'index',
     component: IndexPage,
     meta: {
-      title: '首页'
+      titleArray: ['逐搜搜索']
     }
   },
   {
@@ -18,7 +18,7 @@ const routes = [
     name: 'search',
     component: SearchPage,
     meta: {
-      titleArray: ['%keyword', '搜索']
+      titleArray: ['%keyword', '逐搜搜索']
     }
   },
   {

@@ -1,4 +1,4 @@
-<style lang="scss">
+<style lang="scss" scoped>
     .logo {
         cursor: pointer;
         font-size: 1.2rem;

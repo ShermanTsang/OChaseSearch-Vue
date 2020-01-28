@@ -1,36 +1,66 @@
 <style lang="scss" scoped>
     .search {
-        input {
-            outline: none;
-            color: #999;
-            letter-spacing: 1px;
-            width: 340px;
-            padding: 10px 40px 10px 16px;
-            border-radius: 1px;
-            max-width: 100%;
-            transition: all .2s ease-in-out;
-            background-image: url('../../assets/image/search.png');
-            background-repeat: no-repeat;
-            /*background-position: 305px 5px;*/
-            background-position: center right;
-            background-size: 28px;
-            border: 1px solid #ddd;
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+        border: 1px solid #dfe1e5;
+        margin: 0 auto;
+        transition: all .2s ease-in-out;
+        border-radius: 24px;
+        height: 44px;
+        padding: 10px;
 
-            @media ($screen-sm-min) {
+        &__input {
+            padding: 0 16px;
+
+            input {
+                font-size: 1rem;
+                border: none;
+                outline: none;
+                padding: 0;
+                margin: 0;
+                color: #999;
+                letter-spacing: 1px;
+                width: 340px;
+                max-width: 100%;
+                transition: all .2s ease-in-out;
+
                 &:focus {
                     color: #666;
                     width: 360px;
-                    box-shadow: rgba(177, 177, 177, 0.2) 0 0 10px inset;
-                    background-color: rgb(248, 248, 248);
                 }
             }
+        }
+
+        &__button {
+            position: relative;
+
+            &:before {
+                content: '';
+                position: absolute;
+                height: 100%;
+                top: 0;
+                bottom: 0;
+                left: -12px;
+                width: 2px;
+                background-color: #efefef;
+            }
+        }
+
+        &:hover {
+            box-shadow: 0 1px 12px 0 rgba(32, 33, 36, 0.1);
         }
     }
 </style>
 
 <template>
     <div class="search">
-        <input v-model="form.keyword" type="text" placeholder="搜索..." @keyup.enter="search">
+        <div class="search__input">
+            <input v-model="form.keyword" autofocus type="text" placeholder="" @keyup.enter="search">
+        </div>
+        <div class="search__button">
+            <Icon name="search" color="#aaa" size="1rem" />
+        </div>
     </div>
 </template>
 
@@ -52,8 +82,8 @@
           this.$message.error('关键字不能为空')
           return
         }
-        this.$router.push({name: 'search', query: {keyword}})
         this.$emit('on-search')
+        this.$router.push({name: 'search', query: {keyword}})
       }
     }
   }

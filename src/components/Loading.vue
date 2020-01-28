@@ -1,4 +1,4 @@
-<style lang="scss">
+<style lang="scss" scoped>
     .loading {
         max-width: 100%;
         max-height: 100%;

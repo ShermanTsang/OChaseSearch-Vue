@@ -8,6 +8,7 @@ import store from '@/store'
 import DayJs from 'dayjs'
 import {upperFirst, camelCase} from 'lodash'
 import { createProvider } from './vue-apollo'
+import VueI18n from 'vue-i18n'
 // Plugins
 import Axios from '@/plugins/axios'
 import Toast from '@/plugins/toast'
@@ -16,6 +17,7 @@ import ComponentRegister from '@/plugins/componentRegister'
 import App from '@/App.vue'
 
 Vue.use(VueRouter)
+Vue.use(VueI18n)
 Vue.use(Toast)
 Vue.use(ComponentRegister)
 

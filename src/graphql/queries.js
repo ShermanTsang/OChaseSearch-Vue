@@ -9,6 +9,13 @@ queries.engineList = gql`
             name
             slug
             url
+            category {
+                name
+                icon
+                description
+                slug
+                image
+            }
         }
     }`
 
