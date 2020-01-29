@@ -14,4 +14,7 @@ export default {
   setPullEngineListTime({commit}, data) {
     commit('SET_PULL_ENGINE_LIST_TIME', data)
   },
+  setThemeColor({commit}, data) {
+    commit('SET_THEME_COLOR', data)
+  },
 }

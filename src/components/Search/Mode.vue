@@ -162,9 +162,16 @@
         this.activeEngineList.splice(number - 1,1,'')
         this.$store.commit('SET_ACTIVE_ENGINE_LIST', this.activeEngineList)
       },
-      checkInputLength({value, min, max}) {
-        if (value <= (min + 1) || value >= (max - 1)) {
-          this.$toast.info(`行数设定范围${min}~${max}行`)
+      checkInputLength(target) {
+        const {id: direction,value, min, max} = target
+        if (value <= min || value >= max) {
+          this.$toast.info(`数值设定范围${min}~${max}`)
+          if(value < min) {
+            this[direction] = min
+          }
+          if(value > max) {
+            this[direction] = max
+          }
         }
       }
     }

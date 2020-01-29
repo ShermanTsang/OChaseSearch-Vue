@@ -1,46 +1,60 @@
 <style lang="scss" scoped>
-    .engine {
-        width: 100%;
-        display: flex;
-        flex-flow: row nowrap;
+    .setting-engine {
+        position: relative;
 
-        &__main {
-            padding: 0 10px;
-            width: 75%;
-
-            &__list {
-                display: flex;
-                flex-flow: row wrap;
-                width: 100%;
-            }
+        &__block {
+            color: #666;
+            font-size: .95rem;
+            margin-bottom: 40px;
         }
 
-        &__layout {
-            padding: 0 10px;
-            width: 25%;
+        &__list {
+            display: flex;
+            flex-flow: row wrap;
+            width: 100%;
         }
 
     }
 </style>
 
 <template>
-    <div class="engine">
-        <div class="engine__main">
-            <Nameplate>
-                搜索引擎
-                <div slot="action">
-                    上次拉取{{pullEngineListTime.toString()}} <Btn fontSize="0.9rem" @click="updateEngineList">更新</Btn>
+    <LayoutRow class="setting-engine">
+        <Loading v-if="status.isPullingEngineList" :fix="true">
+            正在拉取搜索引擎数据...
+        </Loading>
+        <template v-esle>
+            <LayoutCol :xs="{span:24}" :sm="{span:24}" :md="{span:16}" :lg="{span:18}" :xl="{span:18}">
+                <div class="setting-engine__block">
+                    <Nameplate>
+                        数据源
+                    </Nameplate>
+                    <SettingItem name="更新数据">
+                        当前有 {{engineList ? engineList.length : 0}} 条数据
+                        <br>
+                        上次拉取于 {{pullEngineListTime}}
+                        <div slot="action">
+                            <Btn fontSize="0.9rem" @click="updateEngineList">
+                                <Icon name="Download" />
+                                更新
+                            </Btn>
+                        </div>
+                    </SettingItem>
                 </div>
-            </Nameplate>
-            <div class="engine__main__list">
-                <SearchEngineCard v-for="item in engineList" :key="item.id" :item="item" />
-            </div>
-        </div>
-        <div class="engine__layout">
-            <Nameplate>搜索模式</Nameplate>
-            <SearchMode />
-        </div>
-    </div>
+                <div class="setting-engine__block">
+                    <Nameplate>
+                        列表
+                    </Nameplate>
+                    <div class="setting-engine__list">
+                        <SearchEngineCard v-for="item in oddEngineList" :key="item.id" :item="item" />
+                    </div>
+                </div>
+            </LayoutCol>
+            <LayoutCol :xs="{span:24}" :sm="{span:24}" :md="{span:8}" :lg="{span:6}" :xl="{span:6}">
+                <Nameplate>布局</Nameplate>
+                <SearchMode />
+            </LayoutCol>
+        </template>
+    </LayoutRow>
 </template>
 
 <script>
@@ -51,20 +65,27 @@
     name: 'SettingEngine',
     props: {},
     data() {
-      return {}
+      return {
+        status: {
+          isPullingEngineList: false
+        }
+      }
     },
     computed: {
-      engineList() {
-        return this.$store.getters.engineList.filter(engineItem => !this.activeEngineList.includes(engineItem.slug))
+      oddEngineList() {
+        return this.engineList.filter(engineItem => !this.activeEngineList.includes(engineItem.slug))
       },
-      ...mapGetters(['pullEngineListTime']),
+      ...mapGetters(['pullEngineListTime','engineList']),
       ...mapState(['activeEngineList'])
     },
     methods: {
       async updateEngineList() {
+        this.status.isPullingEngineList = true
         const {data: {engineList}} = await this.$apollo.query({query: queries.engineList})
         this.$store.commit('SET_ENGINE_LIST', engineList)
         this.$store.commit('SET_PULL_ENGINE_LIST_TIME', this.$time().format('YYYY-MM-DD HH:mm:ss'))
+        this.$toast.success('搜索引擎库已更新')
+        this.status.isPullingEngineList = false
       }
     }
   }

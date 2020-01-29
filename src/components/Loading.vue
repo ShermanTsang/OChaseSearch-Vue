@@ -11,7 +11,8 @@
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            background-color: $theme-color;
+            background-color: $theme-default-color;
+            @include theme-background-color();
             opacity: 0.6;
             position: absolute;
             top: 0;
@@ -25,7 +26,7 @@
 
         &__text {
             margin-top: 10px;
-            color: $theme-color;
+            @include theme-color();
             font-size: .9rem;
             letter-spacing: 1px;
         }

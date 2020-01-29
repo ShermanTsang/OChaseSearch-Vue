@@ -54,6 +54,7 @@
         </div>
         <div class="setting__main">
             <SettingEngine v-if="status.activeTab === 'engine'" />
+            <SettingStyle v-if="status.activeTab === 'style'" />
         </div>
     </div>
 </template>

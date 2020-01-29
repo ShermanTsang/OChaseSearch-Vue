@@ -10,11 +10,12 @@ function getStateValueByCache(cacheKey,valueType,defaultValue) {
     return JSON.parse(localCache) || defaultValue
   }
   if(valueType === 'string') {
-    return localCache.toString() || defaultValue
+    return JSON.parse(localCache) || defaultValue
   }
 }
 
 export default {
+  themeColor: getStateValueByCache('config/themeColor','string','default'),
   modeRow: getStateValueByCache('config/modeRow','number',1),
   modeCol: getStateValueByCache('config/modeCol','number',2),
   activeEngineList: getStateValueByCache('config/activeEngineList','object',['baidu', 'doge']),

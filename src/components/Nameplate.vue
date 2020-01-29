@@ -10,10 +10,11 @@
             position: relative;
             cursor: default;
             font-size: 1rem;
-            letter-spacing: 2px;
-            color: #333;
-            border-left: 4px solid $theme-color;
-            padding-left: 16px;
+            letter-spacing: 1px;
+            border-left: 4px solid $theme-default-color;
+            padding: 4px 16px;
+            @include theme-color();
+            @include theme-border-color();
 
             span {
                 font-size: 1.1rem;

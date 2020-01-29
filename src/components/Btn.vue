@@ -1,16 +1,21 @@
 <style lang="scss">
   .btn {
     cursor: pointer;
-    border: 1px solid #999;
-    color: #999;
+    border: 1px solid #ccc;
+    color: #666;
+    border-radius: 2px;
     padding: 4px 10px;
     letter-spacing: 1px;
     background-color: transparent;
     transition: all .2s ease-in-out;
 
+    &:not(:first-child) {
+      margin-left: 10px;
+    }
+
     &:hover {
-      color: $theme-color;
-      border-color: $theme-color;
+      @include theme-color();
+      @include theme-border-color();
     }
   }
 

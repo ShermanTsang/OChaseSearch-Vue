@@ -50,5 +50,13 @@ export default {
     } catch (e) {
       console.log(e)
     }
+  },
+  ['SET_THEME_COLOR'](state, data) {
+    state.themeColor = data
+    try {
+      localStorage.setItem('config/themeColor', JSON.stringify(data))
+    } catch (e) {
+      console.log(e)
+    }
   }
 }

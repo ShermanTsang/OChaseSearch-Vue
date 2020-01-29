@@ -12,12 +12,12 @@
         border-radius: 4px;
 
         &--info {
-            background-color: $theme-color;
+            background-color: #2E65FF;
             box-shadow: 6px 10px 30px rgba(10, 132, 234, 0.5);
         }
 
         &--success {
-            background-color: green;
+            background-color: #00b500;
             box-shadow: 6px 10px 30px rgba(28, 234, 37, 0.5);
         }
 

@@ -1,4 +1,41 @@
-$theme-color: #ff8514;
+$theme-default-color: #3a6cdd;
+
+$theme-default: (
+    base-color: $theme-default-color,
+);
+
+$theme-orange: (
+    base-color: #ff8514,
+);
+
+$themes: (
+    default: $theme-default,
+    orange: $theme-orange
+);
+
+@mixin theme-color(){
+  @each $themename , $theme in $themes {
+    [data-theme = '#{$themename}'] & {
+      color: map-get($map: $theme, $key: base-color )
+    }
+  }
+}
+
+@mixin theme-background-color(){
+  @each $themename , $theme in $themes {
+    [data-theme = '#{$themename}'] & {
+      background-color: map-get($map: $theme, $key: base-color )
+    }
+  }
+}
+
+@mixin theme-border-color(){
+  @each $themename , $theme in $themes {
+    [data-theme = '#{$themename}'] & {
+      border-color: map-get($map: $theme, $key: base-color )
+    }
+  }
+}
 
 $screen-xs-min: "min-width: 575px";
 $screen-sm-min: "min-width: 576px";

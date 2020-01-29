@@ -17,7 +17,9 @@ export default {
     return state.modeCol > 0 ? state.modeCol : 0
   },
   pullEngineListTime(state) {
-    const localCache = localStorage.getItem('config/pullEngineListTime')
-    return localCache || state.pullEngineListTime
+    return state.pullEngineListTime || null
+  },
+  themeColor(state) {
+    return state.themeColor || 'default'
   }
 }
