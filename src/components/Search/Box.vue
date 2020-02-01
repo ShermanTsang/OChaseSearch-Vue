@@ -200,7 +200,7 @@
       },
       async queryKeywordPrompt() {
         const keyword = this.form.keyword
-        const {s: result} = await this.$axios.jsonp(`http://suggestion.baidu.com/su?wd=${keyword}`, 'cb')
+        const {s: result} = await this.$axios.jsonp(`//suggestion.baidu.com/su?wd=${keyword}`, 'cb')
         this.data.promptKeywordList = result
       },
       selectItem(direction) {
