@@ -84,3 +84,8 @@ html {
 img[src=""], img:not([src]) {
   opacity: 0;
 }
+
+.search-text {
+  @include theme-color;
+  margin: 0 1px;
+}

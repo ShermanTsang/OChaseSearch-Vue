@@ -26,6 +26,7 @@ module.exports = {
     }
   },
   devServer: {
+    open: true,
     host: config['server.host'],
     port: config['server.port'],
     proxy: {

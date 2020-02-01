@@ -21,4 +21,23 @@ Axios.interceptors.response.use(res => {
   return res.data
 })
 
+Axios.jsonp = (url,callbackField) => {
+  if(!url){
+    console.error('Require url parameter!')
+    return
+  }
+  return new Promise((resolve,reject) => {
+    window.jsonCallBack =(result) => {
+      resolve(result)
+    }
+    const JSONP=document.createElement("script")
+    JSONP.type="text/javascript"
+    JSONP.src=`${url}&${callbackField}=jsonCallBack`
+    document.getElementsByTagName("head")[0].appendChild(JSONP)
+    setTimeout(() => {
+      document.getElementsByTagName("head")[0].removeChild(JSONP)
+    },500)
+  })
+}
+
 export default Axios

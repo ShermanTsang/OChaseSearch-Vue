@@ -10,8 +10,12 @@
         <SettingItem name="主题色">
             选择适合你心情的主题
             <div slot="action">
-                <Btn @click="setThemeColor('default')">默认:蓝色</Btn>
-                <Btn @click="setThemeColor('orange')">橙色</Btn>
+                <Btn @click="setThemeColor('default')">
+                    <Icon name="check"/>蓝色
+                </Btn>
+                <Btn @click="setThemeColor('orange')">
+                    <Icon name="check"/>橙色
+                </Btn>
             </div>
         </SettingItem>
     </div>

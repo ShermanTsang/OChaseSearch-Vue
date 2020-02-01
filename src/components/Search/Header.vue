@@ -8,7 +8,6 @@
         height: 64px;
         padding: 10px 20px;
         border-bottom: 1px solid #eee;
-        overflow: hidden;
         transition: all .2s ease-in-out;
         box-shadow: 0 2px 8px rgba(177, 177, 177, .2);
         background-color: #fff;

@@ -30,6 +30,12 @@ Vue.prototype.$apiUrl = (apiUrl) => {
   return 'api' + apiUrl
 }
 
+Vue.directive('focus', {
+  inserted: function(el) {
+    el.focus()
+  }
+})
+
 Vue.config.productionTip = false
 
 new Vue({
