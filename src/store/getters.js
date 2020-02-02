@@ -21,5 +21,8 @@ export default {
   },
   themeColor(state) {
     return state.themeColor || 'default'
+  },
+  historyKeywordList(state) {
+    return state.historyKeywordList || []
   }
 }

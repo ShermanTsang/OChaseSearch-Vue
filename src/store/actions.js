@@ -17,4 +17,7 @@ export default {
   setThemeColor({commit}, data) {
     commit('SET_THEME_COLOR', data)
   },
+  addHistoryKeyword({commit}, data) {
+    commit('ADD_HISTORY_KEYWORD', data)
+  },
 }

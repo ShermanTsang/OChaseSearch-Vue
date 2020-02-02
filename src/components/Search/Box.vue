@@ -80,6 +80,7 @@
                         color: #666666;
                         font-size: .95rem;
                         transition: .2s ease-in-out;
+                        cursor: pointer;
 
                         &:not(:first-child) {
                             border-top: 1px solid #efefef;
@@ -88,13 +89,28 @@
                         &:hover {
                             box-shadow: 0 0 10px rgba(0, 0, 0, .1) inset;
                         }
-                        /deep/ &__highlight {
-                            @include theme-color;
-                        }
                     }
 
                     &__item--active {
+                        padding: 12px 16px;
                         box-shadow: 0 0 10px rgba(0, 0, 0, .1) inset;
+                    }
+                }
+
+                &__history {
+                    padding: 16px;
+
+                    &__item {
+                        display: inline-block;
+                        border: 1px solid #ccc;
+                        font-size: .9rem;
+                        cursor: pointer;
+                        border-radius: 24px;
+                        color: #666;
+                        padding: 4px 8px;
+                        white-space: nowrap;
+                        margin-bottom: 10px;
+                        margin-right: 10px;
                     }
                 }
             }
@@ -104,14 +120,14 @@
 
 <template>
     <div class="search">
-        <div class="search__box" :class="{'search__box--focused':status.showToolbox}">
+        <div class="search__box" :class="{'search__box--focused':status.showToolbox || status.isMouseOnToolbox}">
             <div class="search__box__input">
                 <input v-model="form.keyword" v-focus type="text" placeholder=""
-                       @keyup.enter="search"
+                       @keyup.enter="search()"
                        @keyup.down="selectItem('down')"
                        @keyup.up="selectItem('up')"
-                       @blur="clearPromptResult(false)"
-                       @focus="status.showToolbox = true">
+                       @blur="onInputBlur"
+                       @focus="onInputFocus">
             </div>
             <div class="search__box__button">
                 <Icon name="search" color="#aaa" size="1rem" />
@@ -121,18 +137,26 @@
              @mouseenter="status.isMouseOnToolbox = true"
              @mouseleave="status.isMouseOnToolbox = false"
         >
-            <Tab :tabNames="['搜索建议','历史记录']" defaultTab="搜索建议" class="search__toolbox__tab">
+            <Tab :tabNames="['搜索建议','历史记录']" defaultTab="搜索建议" class="search__toolbox__tab"
+                 @changeTab="(tabName)=>{status.activeTab = tabName}">
                 <div slot="搜索建议">
                     <div class="search__toolbox__tab__prompt">
                         <div v-for="(keyword,index) in data.promptKeywordList" :key="keyword"
                              class="search__toolbox__tab__prompt__item"
                              :class="{'search__toolbox__tab__prompt__item--active': status.selectedPromptIndex === index}"
-                             v-html="highlightKeywordHtml(keyword,'search__text')">
+                             @click="search(keyword)"
+                             v-html="highlightKeywordHtml(keyword)">
                         </div>
                     </div>
                 </div>
                 <div slot="历史记录">
-
+                    <div class="search__toolbox__tab__history">
+                        <div v-for="(keyword,index) in historyKeywordList" :key="index"
+                             class="search__toolbox__tab__history__item"
+                             @click="search(keyword)">
+                            {{keyword}}
+                        </div>
+                    </div>
                 </div>
             </Tab>
         </div>
@@ -140,6 +164,8 @@
 </template>
 
 <script>
+  import {mapGetters} from 'vuex'
+
   function debounce(func, wait = 1000) {
     let timeout
     return function(event) {
@@ -159,14 +185,19 @@
           keyword: this.$route.query.keyword
         },
         status: {
+          activeTab: '搜索建议',
           showToolbox: false,
           isMouseOnToolbox: false,
+          isInputFocused: false,
           selectedPromptIndex: -1
         },
         data: {
           promptKeywordList: []
         }
       }
+    },
+    computed: {
+      ...mapGetters(['historyKeywordList'])
     },
     watch: {
       'form.keyword'(newVal) {
@@ -180,17 +211,20 @@
       }
     },
     methods: {
-      search() {
-        if (this.status.selectedPromptIndex !== -1) {
-          this.form.keyword = this.data.promptKeywordList[this.status.selectedPromptIndex]
-        }
-        const keyword = this.form.keyword.replace(/^\s+|\s+$/g, '')
+      search(keyword = this.form.keyword.replace(/^\s+|\s+$/g, '')) {
         if (!keyword || keyword.length === 0) {
           this.$message.error('关键字不能为空')
           return
         }
+        const isSearchedByPrompt = this.status.isInputFocused && this.status.selectedPromptIndex !== -1
+        if (isSearchedByPrompt) {
+          this.form.keyword = this.data.promptKeywordList[this.status.selectedPromptIndex]
+        } else {
+          this.form.keyword = keyword
+        }
         this.$emit('on-search')
-        this.$router.push({name: 'search', query: {keyword}})
+        this.$router.push({name: 'search', query: {keyword: this.form.keyword}})
+        this.$store.commit('ADD_HISTORY_KEYWORD', this.form.keyword)
       },
       clearPromptResult(emptyResult = true) {
         if (emptyResult) {
@@ -215,12 +249,22 @@
           this.status.selectedPromptIndex = isFirstItem ? currentPromptKeywordIndex : itemIndex - 1
         }
       },
-      highlightKeywordHtml(rawContent,highlightClassName) {
+      highlightKeywordHtml(rawContent, highlightClassName) {
         const resultHtml = rawContent
         const keyword = this.form.keyword || ''
         const replaceReg = new RegExp(keyword, 'g')
-        const replaceString = `<span style="color: red">` + keyword + '</span>'
+        const replaceString = '<span style="color: orangered">' + keyword + '</span>'
         return resultHtml.replace(replaceReg, replaceString)
+      },
+      onInputFocus() {
+        if (this.form.keyword !== '' && this.form.keyword.length > 0) {
+          this.status.showToolbox = true
+        }
+        this.status.isInputFocused = true
+      },
+      onInputBlur() {
+        this.clearPromptResult(false)
+        this.status.isInputFocused = false
       }
     }
   }

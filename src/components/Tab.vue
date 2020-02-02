@@ -69,7 +69,7 @@
     methods: {
       clickTab(tabName) {
         this.status.activeTab = tabName
-        this.$emit('clickTab',tabName)
+        this.$emit('changeTab',tabName)
       }
     }
   }

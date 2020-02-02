@@ -19,6 +19,7 @@ export default {
   modeRow: getStateValueByCache('config/modeRow','number',1),
   modeCol: getStateValueByCache('config/modeCol','number',2),
   activeEngineList: getStateValueByCache('config/activeEngineList','object',['baidu', 'doge']),
+  historyKeywordList: getStateValueByCache('data/historyKeywordList','object',[]),
   engineList: getStateValueByCache('data/engineList','object',[]),
   pullEngineListTime: getStateValueByCache('config/pullEngineListTime','string',null),
 }
