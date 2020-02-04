@@ -7,6 +7,9 @@
             padding-top: 64px;
             height: 100vh;
 
+            &__header {
+            }
+
             &__web {
                 position: relative;
                 width: 100%;
@@ -84,15 +87,12 @@
 <template>
     <div class="page">
         <SearchHeader class="page__header">
-            <SearchBox @on-search="loadIframe" />
+            <SearchBox :autoFocus="false" @on-search="loadIframe"/>
             <div slot="action">
                 <Icon name="setting" cursor="pointer" color="#999" size="1.4rem"
                       @click="status.showEngineMenu = true" />
             </div>
         </SearchHeader>
-        <Modal v-model="status.showEngineMenu" title="设置" icon="setting" contentPadding="0">
-            <SettingIndex activeTab="engine" />
-        </Modal>
         <div class="page__main" :style="gridStyle">
             <template v-if="activeEngineList && activeEngineList.length > 0">
                 <div v-for="number in (modeCol * modeRow)" :key="number" class="page__main__web">
@@ -118,6 +118,9 @@
                 </div>
             </template>
         </div>
+        <Modal v-model="status.showEngineMenu" title="设置" icon="setting" contentPadding="0">
+            <SettingIndex activeTab="engine" />
+        </Modal>
     </div>
 </template>
 
@@ -151,7 +154,7 @@
       ...mapGetters(['modeCol', 'modeRow', 'engineList', 'activeEngineList', 'pullEngineListTime'])
     },
     watch: {
-      activeEngineList(oldVal,newVal) {
+      activeEngineList(oldVal, newVal) {
         const newSlugArray = newVal.map(item => item.slug)
         const diffEngineList = oldVal.filter(item => !newSlugArray.includes(item.slug))
         this.loadIframe(diffEngineList)
@@ -159,8 +162,12 @@
     },
     mounted() {
       this.requestEngineList()
+      this.storeHistoryKeyword()
     },
     methods: {
+      storeHistoryKeyword() {
+        this.$store.commit('ADD_HISTORY_KEYWORD', this.$route.query.keyword)
+      },
       async requestEngineList() {
         if (!this.pullEngineListTime || !this.engineList || this.engineList.length === 0) {
           const {data: {engineList}} = await this.$apollo.query({query: queries.engineList})
@@ -177,7 +184,7 @@
       },
       loadIframe(engineList = this.activeEngineList || []) {
         this.$nextTick(() => {
-          for(const item of engineList) {
+          for (const item of engineList) {
             if (item.url) {
               this.initIframeItem(item.slug)
             }

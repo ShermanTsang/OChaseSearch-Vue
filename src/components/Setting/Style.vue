@@ -11,10 +11,10 @@
             选择适合你心情的主题
             <div slot="action">
                 <Btn @click="setThemeColor('default')">
-                    <Icon name="check"/>蓝色
+                    <Icon v-if="themeColor === 'default'" name="check" color="#aaa" style="margin-right: 10px"/>蓝色
                 </Btn>
                 <Btn @click="setThemeColor('orange')">
-                    <Icon name="check"/>橙色
+                    <Icon v-if="themeColor === 'orange'" name="check" color="#aaa" style="margin-right: 10px"/>橙色
                 </Btn>
             </div>
         </SettingItem>
@@ -31,6 +31,9 @@
     data() {
       return {
       }
+    },
+    computed: {
+      ...mapGetters(['themeColor'])
     },
     methods: {
       setThemeColor(theme) {

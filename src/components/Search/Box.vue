@@ -67,7 +67,7 @@
             border: 1px solid #dfe1e5;
             border-top-color: transparent;
             box-shadow: 0 1px 12px 0 rgba(32, 33, 36, 0.1);
-            z-index: 20;
+            z-index: 1;
 
             &__tab {
 
@@ -101,16 +101,44 @@
                     padding: 16px;
 
                     &__item {
-                        display: inline-block;
+                        $border-radius: 24px;
                         border: 1px solid #ccc;
                         font-size: .9rem;
-                        cursor: pointer;
-                        border-radius: 24px;
-                        color: #666;
-                        padding: 4px 8px;
-                        white-space: nowrap;
+                        border-radius: $border-radius;
                         margin-bottom: 10px;
                         margin-right: 10px;
+                        cursor: pointer;
+                        display: inline-flex;
+                        flex-flow: row nowrap;
+
+                        &__text {
+                            color: #666;
+                            padding: 6px 10px;
+                            white-space: nowrap;
+                            border-top-left-radius: $border-radius;
+                            border-bottom-left-radius: $border-radius;
+                            transition: all .2s ease-in-out;
+
+                            &:hover {
+                                background-color: rgba(#efefef, .8);
+                            }
+                        }
+
+                        &__delete {
+                            display: none;
+                            color: #ccc;
+                            padding: 6px;
+                            transition: all .2s ease-in-out;
+                            border-top-right-radius: 24px;
+                            border-bottom-right-radius: 24px;
+                        }
+
+                        &:hover {
+
+                            .search__toolbox__tab__history__item__delete {
+                                display: block;
+                            }
+                        }
                     }
                 }
             }
@@ -122,7 +150,7 @@
     <div class="search">
         <div class="search__box" :class="{'search__box--focused':status.showToolbox || status.isMouseOnToolbox}">
             <div class="search__box__input">
-                <input v-model="form.keyword" v-focus type="text" placeholder=""
+                <input v-model="form.keyword" v-focus="autoFocus" type="text" placeholder=""
                        @keyup.enter="search()"
                        @keyup.down="selectItem('down')"
                        @keyup.up="selectItem('up')"
@@ -140,7 +168,8 @@
             <Tab :tabNames="['搜索建议','历史记录']" defaultTab="搜索建议" class="search__toolbox__tab"
                  @changeTab="(tabName)=>{status.activeTab = tabName}">
                 <div slot="搜索建议">
-                    <div class="search__toolbox__tab__prompt">
+                    <div v-if="data.promptKeywordList && data.promptKeywordList.length > 0"
+                         class="search__toolbox__tab__prompt">
                         <div v-for="(keyword,index) in data.promptKeywordList" :key="keyword"
                              class="search__toolbox__tab__prompt__item"
                              :class="{'search__toolbox__tab__prompt__item--active': status.selectedPromptIndex === index}"
@@ -148,15 +177,26 @@
                              v-html="highlightKeywordHtml(keyword)">
                         </div>
                     </div>
+                    <Tip v-else>
+                        暂无建议关键字
+                    </Tip>
                 </div>
                 <div slot="历史记录">
-                    <div class="search__toolbox__tab__history">
+                    <div v-if="historyKeywordList && historyKeywordList.length>0" class="search__toolbox__tab__history">
                         <div v-for="(keyword,index) in historyKeywordList" :key="index"
-                             class="search__toolbox__tab__history__item"
-                             @click="search(keyword)">
-                            {{keyword}}
+                             class="search__toolbox__tab__history__item">
+                            <div class="search__toolbox__tab__history__item__text" @click="search(keyword)">
+                                {{keyword}}
+                            </div>
+                            <div class="search__toolbox__tab__history__item__delete"
+                                 @click="$store.commit('DELETE_HISTORY_KEYWORD',keyword)">
+                                <Icon name="close" />
+                            </div>
                         </div>
                     </div>
+                    <Tip v-else>
+                        暂无历史搜索关键字
+                    </Tip>
                 </div>
             </Tab>
         </div>
@@ -178,7 +218,12 @@
 
   export default {
     name: 'SearchBox',
-    props: {},
+    props: {
+      autoFocus: {
+        type: Boolean,
+        default: true
+      }
+    },
     data() {
       return {
         form: {
@@ -197,7 +242,7 @@
       }
     },
     computed: {
-      ...mapGetters(['historyKeywordList'])
+      ...mapGetters(['historyKeywordList']),
     },
     watch: {
       'form.keyword'(newVal) {
@@ -207,8 +252,11 @@
         }
         this.status.selectedPromptIndex = -1
         this.status.showToolbox = true
-        debounce(this.queryKeywordPrompt(), 5000)
+        debounce(this.requestKeywordPrompt(), 5000)
       }
+    },
+    mounted() {
+      debounce(this.requestKeywordPrompt(), 5000)
     },
     methods: {
       search(keyword = this.form.keyword.replace(/^\s+|\s+$/g, '')) {
@@ -224,7 +272,6 @@
         }
         this.$emit('on-search')
         this.$router.push({name: 'search', query: {keyword: this.form.keyword}})
-        this.$store.commit('ADD_HISTORY_KEYWORD', this.form.keyword)
       },
       clearPromptResult(emptyResult = true) {
         if (emptyResult) {
@@ -232,10 +279,12 @@
         }
         this.status.showToolbox = false
       },
-      async queryKeywordPrompt() {
+      async requestKeywordPrompt() {
         const keyword = this.form.keyword
-        const {s: result} = await this.$axios.jsonp(`//suggestion.baidu.com/su?wd=${keyword}`, 'cb')
-        this.data.promptKeywordList = result
+        if (keyword && keyword.length > 0) {
+          const {s: result} = await this.$axios.jsonp(`//suggestion.baidu.com/su?wd=${keyword}`, 'cb')
+          this.data.promptKeywordList = result
+        }
       },
       selectItem(direction) {
         const itemIndex = this.status.selectedPromptIndex
@@ -253,7 +302,7 @@
         const resultHtml = rawContent
         const keyword = this.form.keyword || ''
         const replaceReg = new RegExp(keyword, 'g')
-        const replaceString = '<span style="color: orangered">' + keyword + '</span>'
+        const replaceString = '<span style="opacity: .5;padding-right:4px;">' + keyword + '</span>'
         return resultHtml.replace(replaceReg, replaceString)
       },
       onInputFocus() {

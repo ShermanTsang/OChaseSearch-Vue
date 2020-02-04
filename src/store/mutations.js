@@ -7,13 +7,13 @@ function storeToLocalStorage(key,data) {
 }
 
 export default {
-  ['SET_ENGINE_LIST'](state, data) {
-    state.engineList = data
-    storeToLocalStorage('data/engineList',data)
+  ['SET_ENGINE_LIST'](state, engineList) {
+    state.engineList = engineList
+    storeToLocalStorage('data/engineList',engineList)
   },
-  ['SET_ACTIVE_ENGINE_LIST'](state, data) {
+  ['SET_ACTIVE_ENGINE_LIST'](state, activeEngineList) {
     const activeEngineArray = new Array(state.modeCol * state.modeRow).fill('')
-    activeEngineArray.splice(0, data.length, ...data)
+    activeEngineArray.splice(0, activeEngineList.length, ...activeEngineList)
     state.activeEngineList = activeEngineArray
     storeToLocalStorage('config/activeEngineList',activeEngineArray)
   },
@@ -35,18 +35,29 @@ export default {
     }
     storeToLocalStorage('config/modeCol',Number.parseInt(colNum))
   },
-  ['SET_PULL_ENGINE_LIST_TIME'](state, data) {
-    state.pullEngineListTime = data
-    storeToLocalStorage('config/pullEngineListTime',data)
+  ['SET_PULL_ENGINE_LIST_TIME'](state, lastPullTime) {
+    state.pullEngineListTime = lastPullTime
+    storeToLocalStorage('config/pullEngineListTime',lastPullTime)
   },
-  ['SET_THEME_COLOR'](state, data) {
-    state.themeColor = data
-    storeToLocalStorage('config/themeColor',data)
+  ['SET_THEME_COLOR'](state, themeColor) {
+    state.themeColor = themeColor
+    storeToLocalStorage('config/themeColor',themeColor)
   },
-  ['ADD_HISTORY_KEYWORD'](state, data) {
-    const keywordSet = new Set([data,...state.historyKeywordList])
+  ['ADD_HISTORY_KEYWORD'](state, keyword) {
+    const keywordSet = new Set([keyword,...state.historyKeywordList])
     const keywordArray = Array.from(keywordSet)
     state.historyKeywordList = keywordArray
     storeToLocalStorage('data/historyKeywordList',keywordArray)
+  },
+  ['DELETE_HISTORY_KEYWORD'](state, keyword) {
+    const keywordSet = new Set(state.historyKeywordList)
+    keywordSet.delete(keyword)
+    const keywordArray = Array.from(keywordSet)
+    state.historyKeywordList = keywordArray
+    storeToLocalStorage('data/historyKeywordList',keywordArray)
+  },
+  ['EMPTY_HISTORY_KEYWORD'](state) {
+    state.historyKeywordList = []
+    storeToLocalStorage('data/historyKeywordList',[])
   }
 }

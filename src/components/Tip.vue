@@ -10,6 +10,7 @@
 
     &__text {
       color: #999;
+      font-size: .9rem;
       letter-spacing: 1px;
       text-align: center;
       margin-top: 20px;
@@ -20,8 +21,6 @@
 
 <template>
   <div class="tip">
-    <div class="tip__svg">
-    </div>
     <div class="tip__text">
       <slot />
     </div>

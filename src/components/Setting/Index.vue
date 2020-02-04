@@ -17,8 +17,8 @@
                 transition: all .2s ease-in-out;
                 color: #999;
 
-                &__icon{
-                    margin-right:10px;
+                &__icon {
+                    margin-right: 10px;
                 }
 
                 &__text {
@@ -30,9 +30,9 @@
                 }
             }
 
-            &__item--active{
-                background-color: rgba(177,177,177,.1);
-                box-shadow: 0 0 10px rgba(0,0,0,.1) inset;
+            &__item--active {
+                background-color: rgba(177, 177, 177, .1);
+                box-shadow: 0 0 10px rgba(0, 0, 0, .1) inset;
             }
         }
 
@@ -47,14 +47,19 @@
 <template>
     <div class="setting">
         <div class="setting__menu">
-            <div v-for="item in data.menuList" :key="item.name" class="setting__menu__item" :class="{'setting__menu__item--active': status.activeTab === item.name}" @click="clickSettingItem(item)">
-                <div class="setting__menu__item__icon"><Icon :name="item.icon" size="1.15rem"/></div>
+            <div v-for="item in data.menuList" :key="item.name" class="setting__menu__item"
+                 :class="{'setting__menu__item--active': status.activeTab === item.name}"
+                 @click="clickSettingItem(item)">
+                <div class="setting__menu__item__icon">
+                    <Icon :name="item.icon" size="1.15rem" />
+                </div>
                 <div class="setting__menu__item__text">{{item.text}}</div>
             </div>
         </div>
         <div class="setting__main">
             <SettingEngine v-if="status.activeTab === 'engine'" />
             <SettingStyle v-if="status.activeTab === 'style'" />
+            <SettingFeedback v-if="status.activeTab === 'feedback'" />
         </div>
     </div>
 </template>
@@ -72,9 +77,10 @@
       return {
         data: {
           menuList: [
-            {name: 'preference',text: '用户偏好',icon:'check'},
-            {name: 'engine',text: '搜索引擎',icon:'list'},
-            {name: 'style',text: '界面风格',icon:'color'},
+            {name: 'preference', text: '用户偏好', icon: 'check'},
+            {name: 'engine', text: '搜索引擎', icon: 'list'},
+            {name: 'style', text: '界面风格', icon: 'color'},
+            {name: 'feedback', text: '意见反馈', icon: 'question'},
           ]
         },
         status: {

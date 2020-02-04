@@ -13,6 +13,7 @@ import VueI18n from 'vue-i18n'
 import Axios from '@/plugins/axios'
 import Toast from '@/plugins/toast'
 import ComponentRegister from '@/plugins/componentRegister'
+import VTransfer from '@/plugins/v-transfer'
 // Components
 import App from '@/App.vue'
 
@@ -20,6 +21,7 @@ Vue.use(VueRouter)
 Vue.use(VueI18n)
 Vue.use(Toast)
 Vue.use(ComponentRegister)
+Vue.use(VTransfer)
 
 Vue.prototype.$axios = Axios
 Vue.prototype.$time = DayJs
@@ -31,8 +33,10 @@ Vue.prototype.$apiUrl = (apiUrl) => {
 }
 
 Vue.directive('focus', {
-  inserted: function(el) {
+  inserted: function(el,binding = true) {
+    if(binding.value) {
     el.focus()
+    }
   }
 })
 

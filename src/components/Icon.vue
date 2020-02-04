@@ -28,7 +28,7 @@
       },
       cursor: {
         type: String,
-        default: 'default'
+        default: 'unset'
       }
     },
     computed: {
