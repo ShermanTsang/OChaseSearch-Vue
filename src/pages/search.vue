@@ -100,8 +100,8 @@
                         {{ getEngineItem(number).name }}加载中...
                     </Loading>
                     <div class="page__main__web__iframe">
-                        <iframe v-if="getEngineItem(number).url" :id="`iframe-${getEngineItem(number).slug}`"
-                                :src="getSearchEngineUrl(getEngineItem(number).url)" allowtransparency></iframe>
+                        <iframe v-if="getEngineItem(number).url" :id="`iframe-${getEngineItem(number).slug}`" :src="getSearchEngineUrl(getEngineItem(number).url)"
+                                allowtransparency></iframe>
                     </div>
                     <div class="page__main__web__toolbar">
                         <div class="page__main__web__toolbar__info">
@@ -119,7 +119,7 @@
             </template>
         </div>
         <Modal v-model="status.showEngineMenu" title="设置" icon="setting" contentPadding="0">
-            <SettingIndex activeTab="engine" />
+            <SettingLayout activeTab="engine" />
         </Modal>
     </div>
 </template>
@@ -212,7 +212,7 @@
             }
           }
         }
-      }
+      },
     }
   }
 </script>

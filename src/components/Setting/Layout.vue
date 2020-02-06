@@ -39,7 +39,8 @@
         &__main {
             width: 100%;
             padding: 16px;
-            height: 80vh;
+            height: 85vh;
+            overflow: auto;
         }
     }
 </style>
@@ -66,7 +67,7 @@
 
 <script>
   export default {
-    name: 'SettingIndex',
+    name: 'SettingLayout',
     props: {
       activeTab: {
         type: String,

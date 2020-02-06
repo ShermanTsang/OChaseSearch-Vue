@@ -99,10 +99,13 @@
 
                 &__history {
                     padding: 16px;
+                    max-height: 300px;
+                    overflow: auto;
 
                     &__item {
                         $border-radius: 24px;
-                        border: 1px solid #ccc;
+                        position: relative;
+                        border: 1px solid #ddd;
                         font-size: .9rem;
                         border-radius: $border-radius;
                         margin-bottom: 10px;
@@ -118,22 +121,36 @@
                             border-top-left-radius: $border-radius;
                             border-bottom-left-radius: $border-radius;
                             transition: all .2s ease-in-out;
-
-                            &:hover {
-                                background-color: rgba(#efefef, .8);
-                            }
                         }
 
                         &__delete {
                             display: none;
+                            position: absolute;
                             color: #ccc;
                             padding: 6px;
+                            background-color: #fff;
+                            top: 0;
+                            bottom: 0;
+                            right: 0;
                             transition: all .2s ease-in-out;
                             border-top-right-radius: 24px;
                             border-bottom-right-radius: 24px;
+                            box-shadow: -2px 0 6px rgba(177,177,177,.4);
+                        }
+
+                        &__delete--outer {
+                            top: -1px;
+                            bottom: -1px;
+                            right: -20px;
+                            border-top: 1px solid #ddd;
+                            border-right: 1px solid #ddd;
+                            border-bottom: 1px solid #ddd;
+                            box-shadow: none;
+                            z-index: 1;
                         }
 
                         &:hover {
+                            box-shadow: 0 0 6px rgba(0,0,0,.1);
 
                             .search__toolbox__tab__history__item__delete {
                                 display: block;
@@ -189,6 +206,7 @@
                                 {{keyword}}
                             </div>
                             <div class="search__toolbox__tab__history__item__delete"
+                                 :class="{'search__toolbox__tab__history__item__delete--outer':keyword.length < 4}"
                                  @click="$store.commit('DELETE_HISTORY_KEYWORD',keyword)">
                                 <Icon name="close" />
                             </div>
