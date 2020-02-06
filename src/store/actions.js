@@ -20,4 +20,7 @@ export default {
   addHistoryKeyword({commit}, data) {
     commit('ADD_HISTORY_KEYWORD', data)
   },
+  setLang({commit}, data) {
+    commit('SET_LANG', data)
+  },
 }

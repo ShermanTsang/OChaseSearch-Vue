@@ -135,7 +135,7 @@
                             transition: all .2s ease-in-out;
                             border-top-right-radius: 24px;
                             border-bottom-right-radius: 24px;
-                            box-shadow: -2px 0 6px rgba(177,177,177,.4);
+                            box-shadow: -2px 0 6px rgba(177, 177, 177, .4);
                         }
 
                         &__delete--outer {
@@ -150,7 +150,7 @@
                         }
 
                         &:hover {
-                            box-shadow: 0 0 6px rgba(0,0,0,.1);
+                            box-shadow: 0 0 6px rgba(0, 0, 0, .1);
 
                             .search__toolbox__tab__history__item__delete {
                                 display: block;
@@ -167,7 +167,7 @@
     <div class="search">
         <div class="search__box" :class="{'search__box--focused':status.showToolbox || status.isMouseOnToolbox}">
             <div class="search__box__input">
-                <input v-model="form.keyword" v-focus="autoFocus" type="text" placeholder=""
+                <input v-model="form.keyword" v-focus="autoFocus" type="text" :placeholder="$t('search.placeholder')"
                        @keyup.enter="search()"
                        @keyup.down="selectItem('down')"
                        @keyup.up="selectItem('up')"
@@ -182,9 +182,10 @@
              @mouseenter="status.isMouseOnToolbox = true"
              @mouseleave="status.isMouseOnToolbox = false"
         >
-            <Tab :tabNames="['搜索建议','历史记录']" defaultTab="搜索建议" class="search__toolbox__tab"
+            <Tab :tabNames="[$t('search.promptKeyword'),$t('search.historyKeyword')]"
+                 :defaultTab="$t('search.promptKeyword')" class="search__toolbox__tab"
                  @changeTab="(tabName)=>{status.activeTab = tabName}">
-                <div slot="搜索建议">
+                <div :slot="$t('search.promptKeyword')">
                     <div v-if="data.promptKeywordList && data.promptKeywordList.length > 0"
                          class="search__toolbox__tab__prompt">
                         <div v-for="(keyword,index) in data.promptKeywordList" :key="keyword"
@@ -195,10 +196,10 @@
                         </div>
                     </div>
                     <Tip v-else>
-                        暂无建议关键字
+                        {{$t('search.noMatchedRecord',{type:$t('search.promptKeyword')})}}
                     </Tip>
                 </div>
-                <div slot="历史记录">
+                <div :slot="$t('search.historyKeyword')">
                     <div v-if="historyKeywordList && historyKeywordList.length>0" class="search__toolbox__tab__history">
                         <div v-for="(keyword,index) in historyKeywordList" :key="index"
                              class="search__toolbox__tab__history__item">
@@ -213,7 +214,7 @@
                         </div>
                     </div>
                     <Tip v-else>
-                        暂无历史搜索关键字
+                        {{$t('search.noMatchedRecord',{type:$t('search.historyKeyword')})}}
                     </Tip>
                 </div>
             </Tab>

@@ -1,4 +1,7 @@
 export default {
+  lang(state) {
+    return state.lang || 'zh'
+  },
   engineList(state) {
     return (state.engineList && state.engineList.length > 0) ? state.engineList : []
   },

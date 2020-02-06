@@ -20,15 +20,15 @@
 <template>
     <LayoutRow class="setting-engine">
         <Loading v-if="status.isPullingEngineList" :fix="true">
-            正在拉取搜索引擎数据...
+            {{$t('setting.isPullingEngineList')}}
         </Loading>
         <template v-esle>
             <LayoutCol :xs="{span:24}" :sm="{span:24}" :md="{span:16}" :lg="{span:18}" :xl="{span:18}">
                 <div class="setting-engine__block">
                     <Nameplate>
-                        数据源
+                        {{$t('setting.dataSource')}}
                     </Nameplate>
-                    <SettingItem name="更新数据">
+                    <SettingItem :name="$t('setting.updateData')">
                         当前有 {{engineList ? engineList.length : 0}} 条数据
                         <br>
                         上次拉取于 {{pullEngineListTime}}

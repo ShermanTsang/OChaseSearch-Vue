@@ -7,6 +7,10 @@ function storeToLocalStorage(key,data) {
 }
 
 export default {
+  ['SET_LANG'](state, lang) {
+    state.lang = lang
+    storeToLocalStorage('data/lang',lang)
+  },
   ['SET_ENGINE_LIST'](state, engineList) {
     state.engineList = engineList
     storeToLocalStorage('data/engineList',engineList)

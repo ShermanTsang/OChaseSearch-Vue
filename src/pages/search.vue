@@ -97,7 +97,7 @@
             <template v-if="activeEngineList && activeEngineList.length > 0">
                 <div v-for="number in (modeCol * modeRow)" :key="number" class="page__main__web">
                     <Loading v-if="status.isIframeLoading[getEngineItem(number).slug]" :fix="true">
-                        {{ getEngineItem(number).name }}加载中...
+                        {{ getEngineItem(number).name }} {{$t('search.isLoading')}}...
                     </Loading>
                     <div class="page__main__web__iframe">
                         <iframe v-if="getEngineItem(number).url" :id="`iframe-${getEngineItem(number).slug}`" :src="getSearchEngineUrl(getEngineItem(number).url)"
@@ -111,14 +111,14 @@
                                       class="page__main__web__toolbar__info__right">{{status.iframeLoadingTime[getEngineItem(number).slug] | second}}秒加载</span>
                             </template>
                             <template v-else>
-                                未设定
+                                {{$t('search.unset')}}
                             </template>
                         </div>
                     </div>
                 </div>
             </template>
         </div>
-        <Modal v-model="status.showEngineMenu" title="设置" icon="setting" contentPadding="0">
+        <Modal v-model="status.showEngineMenu" :title="$t('lang.current')" icon="setting" contentPadding="0">
             <SettingLayout activeTab="engine" />
         </Modal>
     </div>

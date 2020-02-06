@@ -16,12 +16,15 @@ import ComponentRegister from '@/plugins/componentRegister'
 import VTransfer from '@/plugins/v-transfer'
 // Components
 import App from '@/App.vue'
+// Languages
+import zh from '@/langs/zh.js'
+import en from '@/langs/en.js'
 
 Vue.use(VueRouter)
-Vue.use(VueI18n)
 Vue.use(Toast)
 Vue.use(ComponentRegister)
 Vue.use(VTransfer)
+Vue.use(VueI18n)
 
 Vue.prototype.$axios = Axios
 Vue.prototype.$time = DayJs
@@ -42,9 +45,18 @@ Vue.directive('focus', {
 
 Vue.config.productionTip = false
 
+const i18n = new VueI18n({
+  locale: localStorage.getItem('config/lang') || 'zh',
+  messages: {
+    zh,
+    en,
+  }
+})
+
 new Vue({
   store,
   router,
   apolloProvider: createProvider(),
+  i18n,
   render: h => h(App)
 }).$mount('#app')

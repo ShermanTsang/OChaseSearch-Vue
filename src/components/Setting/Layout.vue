@@ -61,6 +61,7 @@
             <SettingEngine v-if="status.activeTab === 'engine'" />
             <SettingStyle v-if="status.activeTab === 'style'" />
             <SettingFeedback v-if="status.activeTab === 'feedback'" />
+            <SettingPreference v-if="status.activeTab === 'preference'" />
         </div>
     </div>
 </template>

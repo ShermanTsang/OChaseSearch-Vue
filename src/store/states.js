@@ -15,6 +15,7 @@ function getStateValueByCache(cacheKey,valueType,defaultValue) {
 }
 
 export default {
+  lang: getStateValueByCache('config/lang','string','en'),
   themeColor: getStateValueByCache('config/themeColor','string','default'),
   modeRow: getStateValueByCache('config/modeRow','number',1),
   modeCol: getStateValueByCache('config/modeCol','number',2),
