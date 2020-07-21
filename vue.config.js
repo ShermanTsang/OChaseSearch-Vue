@@ -16,6 +16,7 @@ module.exports = {
         import: true,
       },
       sass: {
+        implementation: require('sass'),
         prependData: `
         @import "@/assets/scss/variables.scss";
         @import "@/assets/scss/global.scss";

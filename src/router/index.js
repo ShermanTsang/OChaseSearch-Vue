@@ -43,7 +43,7 @@ router.beforeEach((to, from, next) => {
   if (to.meta.titleArray) {
     const attribute = {...to.query, ...to.params}
     const newTitleArray = to.meta.titleArray.map(textItem => {
-      if (textItem.includes('%') && attribute.hasOwnProperty(textItem.substr(1))) {
+      if (textItem.includes('%') && textItem.substr(1) in attribute) {
         const attrText = attribute[textItem.substr(1)]
         const replaceText = (attrText && attrText.length > 18) ? `${attrText.substring(0, 18)}...` : attrText
         return attrText ? textItem.replace(textItem, replaceText) : ''
