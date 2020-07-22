@@ -19,6 +19,7 @@ import App from '@/App.vue'
 // Languages
 import zh from '@/langs/zh.js'
 import en from '@/langs/en.js'
+import './registerServiceWorker'
 
 Vue.use(VueRouter)
 Vue.use(Toast)

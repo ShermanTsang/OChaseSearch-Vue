@@ -45,5 +45,13 @@ module.exports = {
     apollo: {
       lintGQL: true
     }
+  },
+  pwa: {
+    name: 'OChase',
+    themeColor: '#3a6cdd',
+    msTileColor: '#000000',
+    workboxPluginMode: 'GenerateSW',
+    workboxOptions: {
+    }
   }
 }
