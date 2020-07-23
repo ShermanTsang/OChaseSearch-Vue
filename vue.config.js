@@ -18,10 +18,10 @@ module.exports = {
       sass: {
         implementation: require('sass'),
         prependData: `
-        @import "@/assets/scss/variables.scss";
-        @import "@/assets/scss/global.scss";
-        @import "@/assets/scss/override.scss";
-        @import "@/assets/scss/animate.scss";
+        @import '@/assets/scss/variables.scss';
+        @import '@/assets/scss/global.scss';
+        @import '@/assets/scss/override.scss';
+        @import '@/assets/scss/animate.scss';
         `
       }
     }
@@ -50,8 +50,13 @@ module.exports = {
     name: 'OChase',
     themeColor: '#3a6cdd',
     msTileColor: '#000000',
-    workboxPluginMode: 'GenerateSW',
+    appleMobileWebAppCapable: 'yes',
+    appleMobileWebAppStatusBarStyle: 'black',
+    // workboxPluginMode: 'GenerateSW',
+    workboxPluginMode: 'InjectManifest',
     workboxOptions: {
+      swSrc: './src/service-work.js',
+      importWorkboxFrom: 'disabled',
     }
   }
 }
