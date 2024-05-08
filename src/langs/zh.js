@@ -16,7 +16,7 @@ export default {
     setLang: '设置语言',
     isPullingEngineList: '正在拉取搜索引擎数据...',
     dataSource: '数据源',
-    updateDate: '更新数据'
+    updateData: '更新数据'
   },
   config: {
     name: '逐搜',

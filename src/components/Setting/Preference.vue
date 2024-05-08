@@ -1,41 +1,41 @@
 <style lang="scss" scoped>
-    .setting-preference {
-        position: relative;
+.setting-preference {
+  position: relative;
 
-        &__block {
-            color: #666;
-            font-size: .95rem;
-            margin-bottom: 40px;
-        }
+  &__block {
+    color: #666;
+    font-size: .95rem;
+    margin-bottom: 40px;
+  }
 
-        &__list {
-            display: flex;
-            flex-flow: row wrap;
-            width: 100%;
-        }
+  &__list {
+    display: flex;
+    flex-flow: row wrap;
+    width: 100%;
+  }
 
-    }
+}
 </style>
 
 <template>
-    <LayoutRow class="setting-preference">
-        <LayoutCol :xs="{span:24}" :sm="{span:24}" :md="{span:24}" :lg="{span:24}" :xl="{span:24}">
-            <div class="setting-preference__block">
-                <Nameplate>
-                    {{$t('setting.i18n')}}
-                </Nameplate>
-                <SettingItem :name="$t('setting.setLang')">
-                    <div slot="action">
-                        <Btn v-for="item in config.langList" :key="item.key" class="lang-switch__item"
-                             @click="activeLang = item.key">
-                            <Icon v-if="activeLang === item.key" name="check" color="#aaa" style="margin-right: 10px" />
-                            {{item.text}}
-                        </Btn>
-                    </div>
-                </SettingItem>
-            </div>
-        </LayoutCol>
-    </LayoutRow>
+  <LayoutRow class="setting-preference">
+    <LayoutCol :xs="{span:24}" :sm="{span:24}" :md="{span:24}" :lg="{span:24}" :xl="{span:24}">
+      <div class="setting-preference__block">
+        <Nameplate>
+          {{ $t('setting.i18n') }}
+        </Nameplate>
+        <SettingItem :name="$t('setting.setLang')">
+          <div slot="action">
+            <Btn v-for="item in config.langList" :key="item.key" class="lang-switch__item"
+                 @click="activeLang = item.key">
+              <Icon v-if="activeLang === item.key" name="check" color="#aaa" style="margin-right: 10px" />
+              {{ item.text }}
+            </Btn>
+          </div>
+        </SettingItem>
+      </div>
+    </LayoutCol>
+  </LayoutRow>
 </template>
 
 <script>
@@ -50,7 +50,7 @@
             {key: 'en', text: 'English'},
           ]
         },
-        status: {}
+        state: {}
       }
     },
     computed: {

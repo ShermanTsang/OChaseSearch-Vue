@@ -1,7 +1,7 @@
 <style lang="scss" scoped>
-  .iconfont {
-    letter-spacing: 1px;
-  }
+.iconfont {
+  letter-spacing: 1px;
+}
 </style>
 
 <template>

@@ -1,17 +1,17 @@
 <style lang="scss" scoped>
-    .logo {
-        cursor: pointer;
-        font-size: 1.2rem;
-        letter-spacing: 4px;
-        color: #999;
-    }
+.logo {
+  cursor: pointer;
+  font-size: 1.2rem;
+  letter-spacing: 4px;
+  color: #999;
+}
 </style>
 
 <template>
-    <div class="logo">
-        <img v-if="type === 'image'" :src="image" :style="style" alt="logo" @click="$router.push('/')">
-        <slot />
-    </div>
+  <div class="logo">
+    <img v-if="type === 'image'" :src="image" :style="style" alt="logo" @click="$router.push('/')">
+    <slot />
+  </div>
 </template>
 
 <script>

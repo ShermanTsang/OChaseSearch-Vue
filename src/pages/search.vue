@@ -90,13 +90,13 @@
             <SearchBox :autoFocus="false" @on-search="loadIframe"/>
             <div slot="action">
                 <Icon name="setting" cursor="pointer" color="#999" size="1.4rem"
-                      @click="status.showEngineMenu = true" />
+                      @click="state.showEngineMenu = true" />
             </div>
         </SearchHeader>
         <div class="page__main" :style="gridStyle">
             <template v-if="activeEngineList && activeEngineList.length > 0">
                 <div v-for="number in (modeCol * modeRow)" :key="number" class="page__main__web">
-                    <Loading v-if="status.isIframeLoading[getEngineItem(number).slug]" :fix="true">
+                    <Loading v-if="state.isIframeLoading[getEngineItem(number).slug]" :fix="true">
                         {{ getEngineItem(number).name }} {{$t('search.isLoading')}}...
                     </Loading>
                     <div class="page__main__web__iframe">
@@ -107,8 +107,8 @@
                         <div class="page__main__web__toolbar__info">
                             <template v-if="getEngineItem(number).slug">
                                 <span>{{ getEngineItem(number).category.name}} /</span> {{ getEngineItem(number).name }}
-                                <span v-if="!status.isIframeLoading[getEngineItem(number).slug]"
-                                      class="page__main__web__toolbar__info__right">{{status.iframeLoadingTime[getEngineItem(number).slug] | second}}秒加载</span>
+                                <span v-if="!state.isIframeLoading[getEngineItem(number).slug]"
+                                      class="page__main__web__toolbar__info__right">{{state.iframeLoadingTime[getEngineItem(number).slug] | second}}秒加载</span>
                             </template>
                             <template v-else>
                                 {{$t('search.unset')}}
@@ -118,7 +118,7 @@
                 </div>
             </template>
         </div>
-        <Modal v-model="status.showEngineMenu" :title="$t('lang.current')" icon="setting" contentPadding="0">
+        <Modal v-model="state.showEngineMenu" :title="$t('lang.current')" icon="setting" contentPadding="0">
             <SettingLayout activeTab="engine" />
         </Modal>
     </div>
@@ -137,7 +137,7 @@
     },
     data() {
       return {
-        status: {
+        state: {
           showEngineMenu: false,
           isIframeLoading: {},
           iframeLoadingTime: {}
@@ -192,23 +192,23 @@
         })
       },
       initIframeItem(slug) {
-        this.$set(this.status.isIframeLoading, slug, true)
-        this.$set(this.status.iframeLoadingTime, slug, this.$time().valueOf())
+        this.$set(this.state.isIframeLoading, slug, true)
+        this.$set(this.state.iframeLoadingTime, slug, this.$time().valueOf())
 
         const iframe = document.getElementById(`iframe-${slug}`)
         if (iframe) {
           if (iframe.attachEvent) {
             // FOR IE
             iframe.attachEvent('onload', () => {
-              this.$set(this.status.isIframeLoading, slug, false)
-              const timeGap = this.$time().valueOf() - this.status.iframeLoadingTime[slug]
-              this.$set(this.status.iframeLoadingTime, slug, timeGap)
+              this.$set(this.state.isIframeLoading, slug, false)
+              const timeGap = this.$time().valueOf() - this.state.iframeLoadingTime[slug]
+              this.$set(this.state.iframeLoadingTime, slug, timeGap)
             })
           } else {
             iframe.onload = () => {
-              this.$set(this.status.isIframeLoading, slug, false)
-              const timeGap = this.$time().valueOf() - this.status.iframeLoadingTime[slug]
-              this.$set(this.status.iframeLoadingTime, slug, timeGap)
+              this.$set(this.state.isIframeLoading, slug, false)
+              const timeGap = this.$time().valueOf() - this.state.iframeLoadingTime[slug]
+              this.$set(this.state.iframeLoadingTime, slug, timeGap)
             }
           }
         }

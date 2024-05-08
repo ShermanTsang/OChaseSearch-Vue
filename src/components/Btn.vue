@@ -1,37 +1,38 @@
 <style lang="scss">
-  .btn {
-    cursor: pointer;
-    border: 1px solid #ccc;
-    color: #666;
-    border-radius: 2px;
-    padding: 4px 10px;
-    letter-spacing: 1px;
-    background-color: transparent;
-    transition: all .2s ease-in-out;
+.btn {
+  cursor: pointer;
+  border: 1px solid #ccc;
+  color: #666;
+  border-radius: 2px;
+  padding: 4px 10px;
+  letter-spacing: 1px;
+  background-color: transparent;
+  transition: all .2s ease-in-out;
 
-    &:not(:first-child) {
-      margin-left: 10px;
-    }
-
-    &:hover {
-      @include theme-color();
-      @include theme-border-color();
-    }
+  &:not(:first-child) {
+    margin-left: 10px;
   }
 
-  .btn--colorful {
-    border: none;
-    @include gradient-background;
-    &:hover {
-      color: #fff;
-    }
+  &:hover {
+    @include theme-color();
+    @include theme-border-color();
   }
+}
 
-  .btn--disabled {
-    pointer-events: none;
-    color: #999;
-    background-color: #efefef;
+.btn--colorful {
+  border: none;
+  @include gradient-background;
+
+  &:hover {
+    color: #fff;
   }
+}
+
+.btn--disabled {
+  pointer-events: none;
+  color: #999;
+  background-color: #efefef;
+}
 </style>
 
 <template>
@@ -71,12 +72,12 @@
     },
     computed: {
       style() {
-        const fullWidth = { width: '100%' }
-        const height = { height: this.height }
-        const width = { width: this.width }
-        const fontSize = { 'font-size': this.fontSize }
+        const fullWidth = {width: '100%'}
+        const height = {height: this.height}
+        const width = {width: this.width}
+        const fontSize = {'font-size': this.fontSize}
         return Object.assign(
-          height, width, this.fullWidth ? fullWidth : '',fontSize
+          height, width, this.fullWidth ? fullWidth : '', fontSize
         )
       },
       classes() {

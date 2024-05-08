@@ -1,19 +1,19 @@
 <style scoped lang="scss">
-  .row {
-    display: flex;
-    flex-wrap: wrap; // 允许换行，当row的两个col的span值都为24时，就呈现两行
-    &.align-left {
-      justify-content: flex-start;
-    }
-
-    &.align-right {
-      justify-content: flex-end;
-    }
-
-    &.align-center {
-      justify-content: center;
-    }
+.row {
+  display: flex;
+  flex-wrap: wrap; // 允许换行，当row的两个col的span值都为24时，就呈现两行
+  &.align-left {
+    justify-content: flex-start;
   }
+
+  &.align-right {
+    justify-content: flex-end;
+  }
+
+  &.align-center {
+    justify-content: center;
+  }
+}
 </style>
 
 <template>
@@ -46,7 +46,7 @@
         }
       },
       rowClass() {
-        const { align } = this
+        const {align} = this
         return [align && `align-${align}`]
       }
     },
